@@ -1,13 +1,32 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface NewTaskModalProps {
   isOpen: boolean;
   isDarkTheme: boolean;
+  onClose: () => void;
 }
 
-const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
+const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
   const [subtasks, setSubtasks] = useState<string[]>([""]);
   const [isMenuDown, setIsMenuDown] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOut = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOut);
+    }
+    return () => {
+      document.addEventListener("mousedown", handleClickOut);
+    };
+  }, [isOpen, onClose]);
 
   const handleAddSubtask = () => {
     setSubtasks([...subtasks, ""]);
@@ -32,9 +51,8 @@ const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
 
   return (
     <div
-      className={`${
-        isOpen ? "" : "hidden"
-      } absolute px-8 top-[175px] left-[480px] w-[480px] ${
+      ref={modalRef}
+      className={`absolute px-8 top-1/4 left-1/4 w-[480px] overflow-auto ${
         isDarkTheme ? "bg-dark-grey text-white" : "bg-white text-black"
       }`}
     >
@@ -88,7 +106,7 @@ const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
                 >
                   <g
                     className="fill-[#828FA3] group-hover:fill-[#EA5555]"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   >
                     <path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z" />
                     <path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z" />
@@ -123,7 +141,7 @@ const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
                 <path
                   stroke="#635FC7"
-                  stroke-width="2"
+                  strokeWidth="2"
                   fill="none"
                   d="M9 6 5 2 1 6"
                 />
@@ -135,7 +153,7 @@ const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
               >
                 <path
                   stroke="#635FC7"
-                  stroke-width="2"
+                  strokeWidth="2"
                   fill="none"
                   d="m1 1 4 4 4-4"
                 />
@@ -150,8 +168,8 @@ const NewTaskModal = ({ isOpen, isDarkTheme }: NewTaskModalProps) => {
               className="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownDefaultButton"
             >
-              {statusCodes.map((status) => (
-                <li value={status}>
+              {statusCodes.map((status, index) => (
+                <li key={index} value={status}>
                   <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     {status}
                   </a>

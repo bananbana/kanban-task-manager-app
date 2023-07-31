@@ -39,6 +39,7 @@ export default {
       white: theme("colors.white"),
       purple: theme("colors.main-purple"),
       "light-grey": theme("colors.light-grey"),
+      "light-purple": theme("colors.main-purple-hover"),
     }),
     extend: {},
   },

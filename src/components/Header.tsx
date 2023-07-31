@@ -1,37 +1,55 @@
+import { Data } from "../App";
+
 interface HeaderProps {
   isDarkTheme: boolean;
   sidebarHidden: boolean;
   openModal: () => void;
+  boardId: string | null;
+  boardData: Data;
 }
 
-const Header = ({ isDarkTheme, sidebarHidden, openModal }: HeaderProps) => {
+const Header = ({
+  isDarkTheme,
+  sidebarHidden,
+  openModal,
+  boardId,
+  boardData,
+}: HeaderProps) => {
+  const openedBoard = boardData.boards.find(
+    (board) => board.boardId === boardId
+  );
+
   return (
-    <header
-      className={`${
+    <div
+      className={`flex-row flex justify-between items-center h-24 ${
         isDarkTheme
           ? "bg-dark-grey border-lines-dark"
           : "bg-white border-lines-light"
-      } flex flex-row justify-between items-center w-full h-[96px] absolute top-0 right-0 border-b px-[24px] py-[29px]`}
+      } border-b flex`}
     >
-      <div className="w-[190px] h-[30px] text-heading-xl flex items-center">
-        <span>
+      <div className="flex flex-row items-center h-full">
+        <div
+          className={`${
+            sidebarHidden ? "px-8" : "pl-8 pr-[114px]"
+          } h-full flex items-center border-r ${
+            isDarkTheme ? "border-lines-dark" : "border-lines-light"
+          }`}
+        >
           <img
             src={`/src/assets/images/${
               isDarkTheme ? "logo-light" : "logo-dark"
             }.svg`}
           ></img>
-        </span>
-        <p
-          className={`${isDarkTheme ? "text-white" : "text-black"} absolute ${
-            sidebarHidden ? "left-[242px]" : "left-[324px]"
-          }`}
-        >
-          Platform Launch
-        </p>
+        </div>
+        <div className="text-heading-xl items-center ml-8">
+          <p className={`${isDarkTheme ? "text-white" : "text-black"}`}>
+            {openedBoard?.name}
+          </p>
+        </div>
       </div>
-      <div className="w-[192.62px] h-[48] flex justify-between items-center">
+      <div className="h-12 flex items-center px-8">
         <button
-          className="w-[168px] h-[48px] border border-none bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] font-bold rounded-full"
+          className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] h-full font-bold rounded-full mr-6 px-6 py-4 flex items-center"
           onClick={() => openModal()}
         >
           + Add New Task
@@ -40,7 +58,7 @@ const Header = ({ isDarkTheme, sidebarHidden, openModal }: HeaderProps) => {
           <img src="/src/assets/images/icon-vertical-ellipsis.svg"></img>
         </button>
       </div>
-    </header>
+    </div>
   );
 };
 

@@ -1,6 +1,7 @@
 {
   "boards": [
     {
+      "boardId": "b1",
       "name": "Platform Launch",
       "columns": [
         {
@@ -284,6 +285,7 @@
       ]
     },
     {
+      "boardId": "b2",
       "name": "Marketing Plan",
       "columns": [
         {
@@ -375,6 +377,7 @@
       ]
     },
     {
+      "boardId": "b3",
       "name": "Roadmap",
       "columns": [
         {
