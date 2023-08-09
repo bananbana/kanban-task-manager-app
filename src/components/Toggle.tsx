@@ -1,14 +1,12 @@
 interface ToggleProps {
-  handleClick: () => void;
-  isDarkTheme: boolean;
+  value: boolean;
+  toggleValue: () => void;
 }
 
-const Toggle = ({ handleClick, isDarkTheme }: ToggleProps) => {
+const Toggle = ({ value, toggleValue }: ToggleProps) => {
   return (
     <div
-      className={`${
-        isDarkTheme ? "bg-very-dark-grey" : "bg-light-grey"
-      } w-[251px] h-[48px] rounded-md flex flex-row justify-center items-center`}
+      className={`w-[251px] h-[48px] rounded-md flex flex-row justify-center items-center dark:bg-very-dark-grey bg-light-grey`}
     >
       <span className="mr-[23px]">
         <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +20,8 @@ const Toggle = ({ handleClick, isDarkTheme }: ToggleProps) => {
         <input
           type="checkbox"
           className="sr-only peer"
-          onClick={() => handleClick()}
+          checked={value}
+          onChange={() => toggleValue()}
         />
         <div className="w-[40px] h-[20px] bg-main-purple hover:bg-main-purple-hover peer-checked:hover:bg-main-purple-hover peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[20px] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-main-purple after:rounded-full after:h-[16px] after:w-[16px] after:transition-all peer-checked:bg-main-purple"></div>
       </label>

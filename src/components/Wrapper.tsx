@@ -4,7 +4,6 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 interface WrapperProps {
-  isDarkTheme: boolean;
   sidebarHidden: boolean;
   boardId: string | null;
   boardData: Data;
@@ -14,10 +13,17 @@ interface WrapperProps {
   openBoard: (args: string) => void;
   children: ReactNode;
   openNewBoardModal: () => void;
+  openDotMenu: () => void;
+  dotMenuOpen: boolean;
+  value: boolean;
+  toggleValue: () => void;
+  isDarkTheme: boolean;
+  closeHeaderDotMenu: () => void;
 }
 
 const Wrapper = ({
-  isDarkTheme,
+  value,
+  toggleValue,
   sidebarHidden,
   boardId,
   boardData,
@@ -26,10 +32,16 @@ const Wrapper = ({
   hideSidebar,
   openBoard,
   openNewBoardModal,
+  openDotMenu,
+  dotMenuOpen,
   children,
+  isDarkTheme,
+  closeHeaderDotMenu,
 }: WrapperProps) => {
   return (
-    <div className={`flex h-full w-screen flex-col overflow-hidden`}>
+    <div
+      className={`flex h-full w-screen flex-col overflow-hidden absolute z-0`}
+    >
       <div className={`h-24`}>
         <Header
           isDarkTheme={isDarkTheme}
@@ -37,6 +49,9 @@ const Wrapper = ({
           openModal={openModal}
           boardId={boardId}
           boardData={boardData}
+          openDotMenu={openDotMenu}
+          dotMenuOpen={dotMenuOpen}
+          closeHeaderDotMenu={closeHeaderDotMenu}
         ></Header>
       </div>
       <div className="flex h-full flex-1 overflow-auto">
@@ -44,16 +59,17 @@ const Wrapper = ({
           ""
         ) : (
           <Sidebar
-            isDarkTheme={isDarkTheme}
             changeTheme={changeTheme}
             hideSidebar={hideSidebar}
             boardsData={boardData}
             openBoard={openBoard}
             selectedBoardId={boardId}
             openNewBoardModal={openNewBoardModal}
+            value={value}
+            toggleValue={toggleValue}
           ></Sidebar>
         )}
-        <div className="flex-1 pl-6 py-5 overflow-auto">{children}</div>
+        <div className="flex-1 pl-6 overflow-auto h-full">{children}</div>
       </div>
     </div>
   );

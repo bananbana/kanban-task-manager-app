@@ -5,6 +5,7 @@ export default {
     "./src/**/*.{html,js,jsx,tsx}",
     "./node_modules/flowbite/**/*.js",
   ],
+  darkMode: "class",
   theme: {
     colors: {
       "main-purple": "#635FC7",
@@ -17,7 +18,7 @@ export default {
       "medium-grey": "#828FA3",
       "lines-light": "#E4EBFA",
       "light-grey": "#F4F7FD",
-      red: "#EA5555",
+      "destructive-red": "#EA5555",
       "red-hover": "#FF9898",
     },
     fontSize: {

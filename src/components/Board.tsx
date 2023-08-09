@@ -1,21 +1,22 @@
 import Column from "./Column";
 import { Data } from "../App";
 import BoardEmpty from "./BoardEmpty";
+import { ColumnData, TaskData } from "./Column";
 
 interface BoardProps {
-  isDarkTheme: boolean;
   boardData: Data;
   boardId: string | null;
   openNewBoardModal: () => void;
   openCreateNewColumn: () => void;
+  openTask: (column: ColumnData, task: TaskData) => void;
 }
 
 const Board = ({
   boardData,
   boardId,
-  isDarkTheme,
   openNewBoardModal,
   openCreateNewColumn,
+  openTask,
 }: BoardProps) => {
   const openedBoard = boardData.boards.find(
     (board) => board.boardId === boardId
@@ -23,29 +24,22 @@ const Board = ({
   return (
     <div
       className={`${
-        boardId ? "overflow-auto flex justify-start items-center" : "hidden"
-      } ${isDarkTheme ? "text-white" : "text-black"}`}
+        boardId ? "" : "hidden"
+      } dark:text-white text-black h-full overflow-hidden`}
     >
       {openedBoard?.columns ? (
-        <div>
-          <div className="flex-row flex">
-            <Column
-              boardId={boardId}
-              boardData={boardData}
-              isDarkTheme={isDarkTheme}
-            ></Column>
-            <div
-              className={`text-heading-xl text-medium-grey flex justify-center items-center group rounded-lg group hover:cursor-pointer ${
-                isDarkTheme
-                  ? "bg-gradient-to-b from-dark-grey to-[rgba(43,44,55,0.5)] to-25%"
-                  : "bg-gradient-to-b from-[rgba(233,239,250,1)] to-[rgba(233,239,250,0.5)] to-25%"
-              }`}
-              onClick={openCreateNewColumn}
-            >
-              <span className="mx-14 group-hover:text-main-purple group-hover:cursor-pointer">
-                + New Column
-              </span>
-            </div>
+        <div className="h-full overflow-auto">
+          <div className="flex-row flex h-full">
+            <Column boardId={boardId} boardData={boardData} openTask={openTask}>
+              <div
+                className={`w-[280px] text-heading-xl text-medium-grey flex justify-center items-center group rounded-lg group hover:cursor-pointer h-full bg-gradient-to-b dark:from-dark-grey dark:to-very-dark-grey to-75% from-[rgba(233,239,250,1)] to-light-grey `}
+                onClick={openCreateNewColumn}
+              >
+                <span className="group-hover:text-main-purple group-hover:cursor-pointer">
+                  + New Column
+                </span>
+              </div>
+            </Column>
           </div>
         </div>
       ) : (

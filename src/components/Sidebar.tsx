@@ -2,18 +2,19 @@ import { Data } from "../App";
 import Toggle from "./Toggle";
 
 interface SidebarProps {
-  isDarkTheme: boolean;
   changeTheme: (args: boolean) => void;
   hideSidebar: () => void;
   boardsData: Data;
   openBoard: (args: string) => void;
   selectedBoardId: string | null;
   openNewBoardModal: () => void;
+  value: boolean;
+  toggleValue: () => void;
 }
 
 const Sidebar = ({
-  changeTheme,
-  isDarkTheme,
+  toggleValue,
+  value,
   hideSidebar,
   boardsData,
   openBoard,
@@ -22,11 +23,7 @@ const Sidebar = ({
 }: SidebarProps) => {
   return (
     <div
-      className={`${
-        isDarkTheme
-          ? "bg-dark-grey border-lines-dark"
-          : "bg-white border-lines-light"
-      } border-r w-[300px] flex flex-col h-auto`}
+      className={`dark:bg-dark-grey dark:border-lines-dark bg-white border-lines-light border-r w-[300px] flex flex-col h-auto`}
     >
       <div className="mb-2 flex items-center mt-[52px]">
         <span className="text-medium-grey text-heading-s ml-8">
@@ -41,19 +38,13 @@ const Sidebar = ({
               key={board.boardId}
               className={`${
                 selectedBoardId === board.boardId ? "bg-main-purple" : ""
-              } h-12 group hover:cursor-pointer rounded-r-full pl-8 mb-1 flex flex-row items-center ${
-                isDarkTheme ? "hover:bg-white" : "hover:bg-main-purple"
-              }`}
+              } h-12 group hover:cursor-pointer rounded-r-full pl-8 mb-1 flex flex-row items-center dark:hover:bg-white hover:bg-main-purple`}
               onClick={() => openBoard(board.boardId)}
             >
               <svg
                 className={`${
                   selectedBoardId === board.boardId ? "fill-white" : "fill-grey"
-                } w-4 h-4 ${
-                  isDarkTheme
-                    ? "group-hover:fill-purple"
-                    : "group-hover:fill-white"
-                }`}
+                } w-4 h-4 dark:group-hover:fill-purple group-hover:fill-white`}
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z" />
@@ -63,11 +54,7 @@ const Sidebar = ({
                   selectedBoardId === board.boardId
                     ? "text-white"
                     : "text-medium-grey"
-                } ${
-                  isDarkTheme
-                    ? "group-hover:text-main-purple"
-                    : "group-hover:text-white"
-                } text-heading-m pl-4`}
+                } dark:group-hover:text-main-purple group-hover:text-white text-heading-m pl-4`}
               >
                 {board.name}
               </p>
@@ -90,15 +77,10 @@ const Sidebar = ({
         </div>
         <div className="flex flex-col my-8">
           <div className="p-2">
-            <Toggle
-              handleClick={() => changeTheme(isDarkTheme)}
-              isDarkTheme={isDarkTheme}
-            ></Toggle>
+            <Toggle value={value} toggleValue={toggleValue}></Toggle>
           </div>
           <div
-            className={`${
-              isDarkTheme ? "hover:bg-white" : "hover:bg-lines-light"
-            } h-12 flex flex-row items-center mr-6 pl-8 hover:cursor-pointer rounded-r-full group`}
+            className={`dark:hover:bg-white hover:bg-lines-light h-12 flex flex-row items-center mr-6 pl-8 hover:cursor-pointer rounded-r-full group`}
             onClick={() => hideSidebar()}
           >
             <svg

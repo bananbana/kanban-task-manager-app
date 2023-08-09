@@ -5,6 +5,9 @@ import NewBoardModal from "./components/NewBoardModal";
 import Board from "./components/Board";
 import data from "./assets/data.json";
 import Wrapper from "./components/Wrapper";
+import Task from "./components/Task";
+import { ColumnData, TaskData } from "./components/Column";
+import Toggle from "./components/Toggle";
 
 export type Data = {
   boards: {
@@ -24,54 +27,32 @@ export type Data = {
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [sidebarHidden, setSidebarHidden] = useState(false);
-  const [newTaskModalOpen, setNewTaskModalOpen] = useState(false);
-  const [newBoardModalOpen, setNewBoardModalOpen] = useState(false);
-  const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
-
-  const localStorageTheme = localStorage.getItem("theme");
-  const systemSettingDark = window.matchMedia("(prefers-color-scheme: dark)");
 
   useEffect(() => {
-    const currentThemeSettings =
-      localStorageTheme ?? (systemSettingDark.matches ? "dark" : "light");
-
-    if (currentThemeSettings === "dark") {
-      setIsDarkTheme(false);
-    } else {
+    // Check if there is already saved theme preference
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
       setIsDarkTheme(true);
-    }
-    setIsDarkTheme(isDarkTheme);
-  }, [isDarkTheme, localStorageTheme, systemSettingDark]);
-
-  const changeTheme = () => {
-    if (isDarkTheme === true) {
-      setIsDarkTheme(false);
     } else {
-      setIsDarkTheme(true);
+      document.documentElement.classList.remove("dark");
     }
-    console.log(isDarkTheme);
-  };
+  }, [isDarkTheme]);
+
+  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const [dotMenuOpen, setDotMenuOpen] = useState(false);
+  // const [taskDotMenuOpen, setTaskDotMenuOpen] = useState(false);
+  const [newTaskModalOpen, setNewTaskModalOpen] = useState(false);
+  const [newBoardModalOpen, setNewBoardModalOpen] = useState(false);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
+  const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
+  const [taskOpen, setTaskOpen] = useState<TaskData>();
 
   const hideSidebar = (value: boolean) => {
     setSidebarHidden(!value);
-  };
-
-  const openNewTaskModal = () => {
-    setNewTaskModalOpen(true);
-  };
-
-  const openNewBoardModal = () => {
-    setNewBoardModalOpen(true);
-  };
-
-  const closeModal = () => {
-    if (newTaskModalOpen) {
-      setNewTaskModalOpen(false);
-    }
-    if (newBoardModalOpen) {
-      setNewBoardModalOpen(false);
-    }
   };
 
   const openBoard = (boardId: string) => {
@@ -82,53 +63,55 @@ function App() {
     console.log("Column created");
   };
 
+  // const openDotMenu = () => {
+  //   dotMenuOpen ? setDotMenuOpen(false) : setDotMenuOpen(true);
+  // };
+
+  // const openTaskDotMenu = () => {
+  //   taskDotMenuOpen ? setTaskDotMenuOpen(false) : setTaskDotMenuOpen(true);
+  // };
+
+  const handleOpenTask = (columnData: ColumnData, taskData: TaskData) => {
+    setTaskModalOpen(true);
+
+    const openedBoard = data.boards.find(
+      (board) => board.boardId === selectedBoardId
+    );
+
+    const activeTask = openedBoard?.columns
+      .find((column) => column === columnData)
+      ?.tasks.find((task) => task === taskData);
+
+    setTaskOpen(activeTask);
+  };
+
+  const changeTheme = () => {
+    if (isDarkTheme) {
+      // Change to light theme and save preference in local storage
+      localStorage.theme = "light";
+      document.documentElement.classList.remove("dark");
+      setIsDarkTheme(false);
+    } else if (!isDarkTheme) {
+      // Change to dark theme and save preference in local storage
+      localStorage.theme = "dark";
+      document.documentElement.classList.add("dark");
+      setIsDarkTheme(true);
+    }
+  };
+
   return (
     <div
-      className={`h-full relative ${
-        isDarkTheme ? "bg-very-dark-grey" : "bg-light-grey"
-      }`}
+      className={`h-full relative flex justify-center items-center dark:bg-very-dark-grey bg-light-grey`}
     >
-      <Wrapper
-        isDarkTheme={isDarkTheme}
-        sidebarHidden={sidebarHidden}
-        boardId={selectedBoardId}
-        boardData={data}
-        openModal={openNewTaskModal}
-        changeTheme={changeTheme}
-        hideSidebar={() => hideSidebar(sidebarHidden)}
-        openBoard={openBoard}
-        openNewBoardModal={openNewBoardModal}
-      >
-        <Board
-          boardId={selectedBoardId}
-          isDarkTheme={isDarkTheme}
-          boardData={data}
-          openNewBoardModal={openNewBoardModal}
-          openCreateNewColumn={createNewColumn}
-        ></Board>
-        {newTaskModalOpen ? (
-          <NewTaskModal
-            isOpen={newTaskModalOpen}
-            isDarkTheme={isDarkTheme}
-            onClose={closeModal}
-          ></NewTaskModal>
-        ) : (
-          ""
-        )}
-        {newBoardModalOpen ? (
-          <NewBoardModal
-            isOpen={newBoardModalOpen}
-            isDarkTheme={isDarkTheme}
-            onClose={closeModal}
-          ></NewBoardModal>
-        ) : (
-          ""
-        )}
-      </Wrapper>
+      {newTaskModalOpen || newBoardModalOpen || taskModalOpen ? (
+        <div className="h-full w-screen backdrop-brightness-50 absolute z-10"></div>
+      ) : (
+        ""
+      )}
       <button
         className={`${
           sidebarHidden
-            ? "fixed w-14 h-12 rounded-r-full bg-main-purple hover:bg-main-purple-hover bottom-8  items-center"
+            ? "fixed left-0 z-50 w-14 h-12 rounded-r-full bg-main-purple hover:bg-main-purple-hover bottom-8  items-center"
             : "hidden"
         }`}
         onClick={() => setSidebarHidden(false)}
@@ -139,6 +122,51 @@ function App() {
           className="pl-[18px]"
         />
       </button>
+      <Wrapper
+        sidebarHidden={sidebarHidden}
+        boardId={selectedBoardId}
+        boardData={data}
+        openModal={() => setNewTaskModalOpen(true)}
+        changeTheme={changeTheme}
+        hideSidebar={() => hideSidebar(sidebarHidden)}
+        openBoard={openBoard}
+        openNewBoardModal={() => setNewBoardModalOpen(true)}
+        openDotMenu={() => setDotMenuOpen(true)}
+        dotMenuOpen={dotMenuOpen}
+        value={isDarkTheme}
+        toggleValue={changeTheme}
+        isDarkTheme={isDarkTheme}
+        closeHeaderDotMenu={() => setDotMenuOpen(false)}
+      >
+        <Board
+          boardId={selectedBoardId}
+          boardData={data}
+          openNewBoardModal={() => setNewBoardModalOpen(true)}
+          openCreateNewColumn={createNewColumn}
+          openTask={handleOpenTask}
+        ></Board>
+      </Wrapper>
+      {newTaskModalOpen && (
+        <NewTaskModal
+          onClose={() => setNewTaskModalOpen(false)}
+          boardId={selectedBoardId}
+          boardData={data}
+        ></NewTaskModal>
+      )}
+      {newBoardModalOpen && (
+        <NewBoardModal onClose={() => setNewBoardModalOpen(false)} />
+      )}
+      {taskModalOpen && (
+        <Task
+          openTaskDotMenu={() => setDotMenuOpen(true)}
+          taskDotMenuOpen={dotMenuOpen}
+          closeDotMenu={() => setDotMenuOpen(false)}
+          taskData={taskOpen}
+          boardData={data}
+          boardId={selectedBoardId}
+          onClose={() => setTaskModalOpen(false)}
+        ></Task>
+      )}
     </div>
   );
 }

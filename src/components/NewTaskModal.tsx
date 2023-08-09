@@ -1,32 +1,19 @@
 import { useState, useRef, useEffect } from "react";
+import { Data } from "../App";
+import DropdownMenu from "./DropDownMenu";
+import useCloseModal from "../assets/useCloseModal";
 
 interface NewTaskModalProps {
-  isOpen: boolean;
-  isDarkTheme: boolean;
   onClose: () => void;
+  boardData: Data;
+  boardId: string | null;
 }
 
-const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
+const NewTaskModal = ({ onClose, boardData, boardId }: NewTaskModalProps) => {
   const [subtasks, setSubtasks] = useState<string[]>([""]);
-  const [isMenuDown, setIsMenuDown] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOut = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOut);
-    }
-    return () => {
-      document.addEventListener("mousedown", handleClickOut);
-    };
-  }, [isOpen, onClose]);
+  useCloseModal(modalRef, onClose);
 
   const handleAddSubtask = () => {
     setSubtasks([...subtasks, ""]);
@@ -43,31 +30,23 @@ const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
     setSubtasks(updatedSubtasks);
   };
 
-  const handleIsDropedDown = (isMenuDown: boolean) => {
-    setIsMenuDown(!isMenuDown);
-  };
-
-  const statusCodes = ["Todo", "Doing", "Done"];
+  const openedBoard = boardData.boards.find(
+    (board) => board.boardId === boardId
+  );
 
   return (
     <div
       ref={modalRef}
-      className={`absolute px-8 top-1/4 left-1/4 w-[480px] overflow-auto ${
-        isDarkTheme ? "bg-dark-grey text-white" : "bg-white text-black"
-      }`}
+      className={`px-8 absolute z-10 rounded-lg w-[480px] overflow-visible dark:bg-dark-grey dark:text-white bg-white text-b`}
     >
-      <h1 className="text-heading-l pt-8">Add New Task</h1>
-      <form className="flex flex-col pt-6">
+      <p className="text-heading-l pt-8">Add New Task</p>
+      <div className="flex flex-col pt-6">
         <div className="pb-6">
           <label className="text-body-m text-medium-grey pb-2">Title</label>
           <input
             type="text"
             placeholder=""
-            className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple ${
-              isDarkTheme
-                ? "bg-dark-grey border-lines-dark"
-                : "border-lines-light"
-            }`}
+            className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
           ></input>
         </div>
         <div className="pb-6">
@@ -77,11 +56,7 @@ const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
           <input
             type="textarea"
             placeholder=""
-            className={`border rounded-md w-full h-[112px] px-2 focus:outline-main-purple ${
-              isDarkTheme
-                ? "bg-dark-grey border-lines-dark"
-                : "border-lines-light"
-            }`}
+            className={`border rounded-md w-full h-[112px] px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
           ></input>
         </div>
         <div className="">
@@ -91,11 +66,7 @@ const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
               <input
                 type="text"
                 value={subtask}
-                className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple ${
-                  isDarkTheme
-                    ? "bg-dark-grey border-lines-dark"
-                    : "border-lines-light"
-                }`}
+                className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
                 onChange={(e) => handleSubtaskChange(index, e.target.value)}
               ></input>
               <div className="group pl-4 hover:cursor-pointer">
@@ -116,74 +87,30 @@ const NewTaskModal = ({ isOpen, isDarkTheme, onClose }: NewTaskModalProps) => {
             </div>
           ))}
           <button
-            className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l ${
-              isDarkTheme
-                ? "bg-white"
-                : "bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25"
-            }`}
+            className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
             onClick={handleAddSubtask}
             type="button"
           >
             + Add New Subtask
           </button>
         </div>
-        <div className="flex flex-col pt-6">
-          <label className="text-body-m text-medium-grey pb-2">Status</label>
-          <button
-            id="dropdownButton"
-            data-dropdown-toggle="dropdown"
-            className="p-4 text-black text-body-l w-full h-[40px] border border-lines-light rounded-md focus:outline-main-purple flex items-center justify-between"
-            type="button"
-            onClick={() => handleIsDropedDown(isMenuDown)}
-          >
-            Todo{" "}
-            {isMenuDown ? (
-              <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  stroke="#635FC7"
-                  strokeWidth="2"
-                  fill="none"
-                  d="M9 6 5 2 1 6"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-[10px] h-[7px]"
-              >
-                <path
-                  stroke="#635FC7"
-                  strokeWidth="2"
-                  fill="none"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            )}
-          </button>
-          <div
-            id="dropdown"
-            className="z-10 hidden bg-white rounded-b-lg shadow-md w-full text-body-l"
-          >
-            <ul
-              className="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdownDefaultButton"
-            >
-              {statusCodes.map((status, index) => (
-                <li key={index} value={status}>
-                  <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {status}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <DropdownMenu
+          label="Status"
+          initialValue={openedBoard?.columns[0].name}
+          menuOptions={openedBoard?.columns.map((column, index) => (
+            <li key={index}>
+              <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                {column.name}
+              </a>
+            </li>
+          ))}
+        ></DropdownMenu>
         <div className="w-full mb-8 mt-6">
           <button className="w-full h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l">
             Create Task
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
