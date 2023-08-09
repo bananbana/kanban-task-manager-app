@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Data } from "../App";
-import { SubtaskData, TaskData } from "./Column";
+import { TaskData } from "./Column";
 import DotDropDown from "./DotDropDown";
 import DropdownMenu from "./DropDownMenu";
 import useCloseModal from "../assets/useCloseModal";
