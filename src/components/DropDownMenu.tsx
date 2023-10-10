@@ -64,6 +64,7 @@ const DropdownMenu = ({
           <ul
             className="py-2 text-sm text-black dark:text-medium-grey"
             aria-labelledby="dropdownDefaultButton"
+            onClick={() => setIsMenuDown(false)}
           >
             {menuOptions}
           </ul>

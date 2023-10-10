@@ -1,116 +1,247 @@
-import { useState, useRef } from "react";
-import { Data } from "../App";
+import React, { useEffect, useRef, useState } from "react";
+import useCloseModal from "../assets/hooks/useCloseModal";
+import useBoardDetails from "../assets/hooks/useBoardsDetails";
 import DropdownMenu from "./DropDownMenu";
-import useCloseModal from "../assets/useCloseModal";
+import InputAndDelete from "./InputAndDelete";
+import useTaskMutation from "../assets/hooks/useMutateTask";
+import useTask from "../assets/hooks/useTask";
 
 interface NewTaskModalProps {
   onClose: () => void;
-  boardData: Data;
-  boardId: string | null;
+  openedBoardId: number;
+  createTaskModal: boolean;
+  editTaskModal: boolean;
+  openedTaskId: number;
 }
 
-const NewTaskModal = ({ onClose, boardData, boardId }: NewTaskModalProps) => {
-  const [subtasks, setSubtasks] = useState<string[]>([""]);
+const NewTaskModal = ({
+  onClose,
+  openedBoardId,
+  editTaskModal,
+  createTaskModal,
+  openedTaskId,
+}: NewTaskModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-
   useCloseModal(modalRef, onClose);
 
-  const handleAddSubtask = () => {
-    setSubtasks([...subtasks, ""]);
-  };
+  const { createTask, editTask, addSubtaskToTask, editSubtask, deleteSubtask } =
+    useTaskMutation();
+  const { statusCodesData } = useBoardDetails(openedBoardId);
+  const { taskData, subtaskData } = useTask(openedTaskId, openedBoardId);
 
-  const handleSubtaskChange = (index: number, value: string) => {
-    const updatedSubtasks = [...subtasks];
-    updatedSubtasks[index] = value;
-    setSubtasks(updatedSubtasks);
-  };
-
-  const handleRemoveSubtask = (index: number) => {
-    const updatedSubtasks = subtasks.filter((_, i) => i !== index);
-    setSubtasks(updatedSubtasks);
-  };
-
-  const openedBoard = boardData.boards.find(
-    (board) => board.boardId === boardId
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState("");
+  const [subtasks, setSubtasks] = useState([{ id: 1, value: "" }]);
+  const [statusId, setStatusId] = useState(
+    statusCodesData?.[0]?.id !== undefined ? statusCodesData[0].id : 0
   );
+
+  useEffect(() => {
+    if (editTaskModal && taskData && subtaskData) {
+      setStatusId(taskData.statusId);
+      setTitle(taskData.title);
+      setDescription(taskData.description);
+      setSubtasks(
+        subtaskData.map((subtask) => ({ id: subtask.id, value: subtask.title }))
+      );
+    }
+  }, [editTaskModal, subtaskData, taskData]);
+
+  const handleCreateTask = (
+    boardId: number,
+    title: string,
+    description: string,
+    statusId: number,
+    subtaskTitles: string[]
+  ) => {
+    createTask({ boardId, title, description, statusId, subtaskTitles });
+    onClose();
+  };
+
+  const handleEditTask = (
+    boardId: number,
+    title: string,
+    description: string,
+    statusId: number,
+    taskId: number
+  ) => {
+    editTask({ boardId, title, description, statusId, taskId });
+    onClose();
+  };
+
+  const handleAddSubtask = (taskId: number, title: string) => {
+    addSubtaskToTask({ taskId, title });
+  };
+
+  const handleEditSubtask = (taskId: number, id: number, title: string) => {
+    editSubtask({ taskId, id, title });
+  };
+
+  const handleDeleteSubtask = (taskId: number, id: number) => {
+    deleteSubtask({ taskId, id });
+  };
+
+  const addSubtask = () => {
+    const newId = Math.max(...subtasks.map((subtask) => subtask.id)) + 1;
+    setSubtasks([...subtasks, { id: newId, value: "" }]);
+  };
+
+  const handleSubtaskChange = (id: number, value: string) => {
+    setSubtasks((prevSubtasks) =>
+      prevSubtasks.map((subtask) => {
+        if (subtask.id === id) {
+          return { ...subtask, value };
+        }
+        return subtask;
+      })
+    );
+  };
+
+  const handleRemove = (id: number) => {
+    setSubtasks((prevSubtasks) =>
+      prevSubtasks.filter((subtask) => subtask.id !== id)
+    );
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setDescription(e.target.value);
+  };
+  const handleStatusChange = (id: number) => {
+    setStatusId(id);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subtaskTitles = subtasks
+      .map((subtask) => subtask.value)
+      .filter((value) => value !== "");
+    if (createTaskModal) {
+      handleCreateTask(
+        openedBoardId,
+        title,
+        description,
+        statusId,
+        subtaskTitles
+      );
+    } else if (editTaskModal) {
+      const newSubtasks = subtasks.filter(
+        (subtask) =>
+          !subtaskData?.some((subtask_) => subtask_.id === subtask.id)
+      );
+      const deletedSubtasks = subtaskData?.filter(
+        (subtask) => !subtasks.some((subtask_) => subtask_.id === subtask.id)
+      );
+      handleEditTask(openedBoardId, title, description, statusId, openedTaskId);
+      newSubtasks.forEach((subtask) => {
+        handleAddSubtask(openedTaskId, subtask.value);
+      });
+      subtasks
+        .filter((subtask) => !newSubtasks.includes(subtask))
+        .forEach((subtask) => {
+          handleEditSubtask(openedTaskId, subtask.id, subtask.value);
+        });
+      deletedSubtasks?.forEach((subtask) => {
+        handleDeleteSubtask(openedTaskId, subtask.id);
+      });
+    }
+  };
 
   return (
     <div
       ref={modalRef}
       className={`px-8 absolute z-10 rounded-lg w-[480px] overflow-visible dark:bg-dark-grey dark:text-white bg-white text-b`}
     >
-      <p className="text-heading-l pt-8">Add New Task</p>
-      <div className="flex flex-col pt-6">
-        <div className="pb-6">
-          <label className="text-body-m text-medium-grey pb-2">Title</label>
-          <input
-            type="text"
-            placeholder=""
-            className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
-          ></input>
-        </div>
-        <div className="pb-6">
-          <label className="text-body-m text-medium-grey pb-2">
-            Description
-          </label>
-          <input
-            type="textarea"
-            placeholder=""
-            className={`border rounded-md w-full h-[112px] px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
-          ></input>
-        </div>
-        <div className="">
-          <label className="text-body-m text-medium-grey pb-2">Subtasks</label>
-          {subtasks.map((subtask, index) => (
-            <div className="flex flex-row items-center pb-3" key={index}>
-              <input
-                type="text"
-                value={subtask}
-                className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
-                onChange={(e) => handleSubtaskChange(index, e.target.value)}
-              ></input>
-              <div className="group pl-4 hover:cursor-pointer">
-                <svg
-                  className="w-[14px] h-[15px]"
-                  xmlns="http://www.w3.org/2000/svg"
-                  onClick={() => handleRemoveSubtask(index)}
-                >
-                  <g
-                    className="fill-[#828FA3] group-hover:fill-[#EA5555]"
-                    fillRule="evenodd"
+      <p className="text-heading-l pt-8">
+        {(editTaskModal && "Edit Task") || (createTaskModal && "Add New Task")}
+      </p>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col pt-6">
+          <div className="pb-6">
+            <label className="text-body-m text-medium-grey pb-2">Title</label>
+            <input
+              type="text"
+              placeholder="e.g. Take coffee break"
+              value={title}
+              required
+              autoFocus
+              onChange={handleTitleChange}
+              className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
+            ></input>
+          </div>
+          <div className="pb-6">
+            <label className="text-body-m text-medium-grey pb-2">
+              Description
+            </label>
+            {/* <input
+              type="text"
+              placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
+              value={description}
+              onChange={handleDescriptionChange}
+              className={`border rounded-md w-full h-[112px] px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all`}
+            ></input> */}
+            <textarea
+              placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
+              value={description}
+              onChange={handleDescriptionChange}
+              className={`border rounded-md w-full h-[112px] px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all`}
+              style={{ resize: "none" }}
+            ></textarea>
+          </div>
+          <div className="">
+            <label className="text-body-m text-medium-grey pb-2">
+              Subtasks
+            </label>
+            {subtasks.map((subtask) => (
+              <InputAndDelete
+                key={subtask.id}
+                id={subtask.id}
+                value={subtask.value}
+                onChange={handleSubtaskChange}
+                handleRemove={handleRemove}
+              />
+            ))}
+            <button
+              className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
+              type="button"
+              onClick={addSubtask}
+            >
+              + Add New Subtask
+            </button>
+          </div>
+          {statusCodesData && (
+            <DropdownMenu
+              label="Status"
+              initialValue={
+                statusCodesData.find((status) => status.id === statusId)?.name
+              }
+              menuOptions={statusCodesData.map((status) => (
+                <li key={status.id}>
+                  <a
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    onClick={() => handleStatusChange(status.id)}
                   >
-                    <path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z" />
-                    <path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z" />
-                  </g>
-                </svg>
-              </div>
-            </div>
-          ))}
-          <button
-            className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
-            onClick={handleAddSubtask}
-            type="button"
-          >
-            + Add New Subtask
-          </button>
+                    {status.name}
+                  </a>
+                </li>
+              ))}
+            ></DropdownMenu>
+          )}
+          <div className="w-full mb-8 mt-6">
+            <button
+              className="w-full h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l"
+              type="submit"
+            >
+              {(editTaskModal && "Save Changes") ||
+                (createTaskModal && "Create Task")}
+            </button>
+          </div>
         </div>
-        <DropdownMenu
-          label="Status"
-          initialValue={openedBoard?.columns[0].name}
-          menuOptions={openedBoard?.columns.map((column, index) => (
-            <li key={index}>
-              <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                {column.name}
-              </a>
-            </li>
-          ))}
-        ></DropdownMenu>
-        <div className="w-full mb-8 mt-6">
-          <button className="w-full h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l">
-            Create Task
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   );
 };

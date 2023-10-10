@@ -1,30 +1,30 @@
-import { Data } from "../App";
+import { useState } from "react";
 import DotDropDown from "./DotDropDown";
+import useBoards from "../assets/hooks/useBoards";
 
 interface HeaderProps {
-  sidebarHidden: boolean;
-  openModal: () => void;
-  openDotMenu: () => void;
-  boardId: string | null;
-  boardData: Data;
-  dotMenuOpen: boolean;
   isDarkTheme: boolean;
-  closeHeaderDotMenu: () => void;
+  sidebarHidden: boolean;
+  openedBoardId: number;
+  openNewTaskModal: () => void;
+  openConfirmModal: () => void;
+  openEditBoardModal: () => void;
+  deleteOnWhat: string;
 }
 
 const Header = ({
-  sidebarHidden,
-  openModal,
-  openDotMenu,
-  boardId,
-  boardData,
-  dotMenuOpen,
   isDarkTheme,
-  closeHeaderDotMenu,
+  sidebarHidden,
+  openedBoardId,
+  openNewTaskModal,
+  openConfirmModal,
+  openEditBoardModal,
+  deleteOnWhat,
 }: HeaderProps) => {
-  const openedBoard = boardData.boards.find(
-    (board) => board.boardId === boardId
-  );
+  const [headerDotMenuOpen, setHeaderDotMenuOpen] = useState(false);
+  const { data } = useBoards();
+
+  const openedBoard = data?.find((board) => board.id === openedBoardId);
 
   return (
     <div
@@ -48,27 +48,28 @@ const Header = ({
       </div>
       <div className="h-12 flex items-center px-8">
         <button
-          className={`${
-            openedBoard
-              ? "bg-main-purple hover:bg-main-purple-hover"
-              : "bg-main-purple-hover cursor-default"
-          } text-[#FFFFFF] h-full font-bold rounded-full mr-6 px-6 py-4 flex items-center`}
-          onClick={() => openedBoard && openModal()}
+          className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] h-full font-bold rounded-full mr-6 px-6 py-4 flex items-center disabled:bg-main-purple-hover"
+          disabled={!openedBoard}
+          onClick={() => openedBoard && openNewTaskModal()}
         >
           + Add New Task
         </button>
         <button
-          className={`py-2 px-2 flex justify-center items-center rounded-full dark:hover:bg-very-dark-grey hover:bg-lines-light`}
-          onClick={() => openedBoard && openDotMenu()}
+          className={`py-2 px-2 flex justify-center items-center rounded-full enabled:dark:hover:bg-very-dark-grey enabled:hover:bg-lines-light`}
+          onClick={() => openedBoard && setHeaderDotMenuOpen(true)}
+          disabled={!openedBoard}
         >
           <img src="/src/assets/images/icon-vertical-ellipsis.svg"></img>
         </button>
-        {dotMenuOpen && (
+        {headerDotMenuOpen && (
           <div className={`z-30 fixed top-[90px] right-4`}>
             <DotDropDown
-              onClose={closeHeaderDotMenu}
+              editContent={openEditBoardModal}
+              deleteContent={openConfirmModal}
+              onClose={() => setHeaderDotMenuOpen(false)}
               topContent="Edit Board"
               bottomContent="Delete Board"
+              whatToDelete={deleteOnWhat}
             ></DotDropDown>
           </div>
         )}

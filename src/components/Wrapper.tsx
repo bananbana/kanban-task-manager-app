@@ -1,42 +1,37 @@
 import { ReactNode } from "react";
-import { Data } from "../App";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 interface WrapperProps {
   sidebarHidden: boolean;
-  boardId: string | null;
-  boardData: Data;
-  openModal: () => void;
-  changeTheme: (args: boolean) => void;
-  hideSidebar: () => void;
-  openBoard: (args: string) => void;
   children: ReactNode;
-  openNewBoardModal: () => void;
-  openDotMenu: () => void;
-  dotMenuOpen: boolean;
   value: boolean;
   toggleValue: () => void;
   isDarkTheme: boolean;
-  closeHeaderDotMenu: () => void;
+  hideSidebar: () => void;
+  openedBoardId: number;
+  setBoardId: (args: number) => void;
+  openNewTaskModal: () => void;
+  openNewBoardModal: () => void;
+  openConfirmModal: () => void;
+  openEditBoardModal: () => void;
+  deleteOnWhat: string;
 }
 
 const Wrapper = ({
   value,
   toggleValue,
-  sidebarHidden,
-  boardId,
-  boardData,
-  openModal,
-  changeTheme,
-  hideSidebar,
-  openBoard,
-  openNewBoardModal,
-  openDotMenu,
-  dotMenuOpen,
   children,
   isDarkTheme,
-  closeHeaderDotMenu,
+  hideSidebar,
+  sidebarHidden,
+  openedBoardId,
+  setBoardId,
+  openNewTaskModal,
+  openNewBoardModal,
+  openConfirmModal,
+  openEditBoardModal,
+  deleteOnWhat,
 }: WrapperProps) => {
   return (
     <div
@@ -44,14 +39,13 @@ const Wrapper = ({
     >
       <div className={`h-24`}>
         <Header
+          openEditBoardModal={openEditBoardModal}
           isDarkTheme={isDarkTheme}
           sidebarHidden={sidebarHidden}
-          openModal={openModal}
-          boardId={boardId}
-          boardData={boardData}
-          openDotMenu={openDotMenu}
-          dotMenuOpen={dotMenuOpen}
-          closeHeaderDotMenu={closeHeaderDotMenu}
+          openedBoardId={openedBoardId}
+          openNewTaskModal={openNewTaskModal}
+          openConfirmModal={openConfirmModal}
+          deleteOnWhat={deleteOnWhat}
         ></Header>
       </div>
       <div className="flex h-full flex-1 overflow-auto">
@@ -59,17 +53,16 @@ const Wrapper = ({
           ""
         ) : (
           <Sidebar
-            changeTheme={changeTheme}
             hideSidebar={hideSidebar}
-            boardsData={boardData}
-            openBoard={openBoard}
-            selectedBoardId={boardId}
-            openNewBoardModal={openNewBoardModal}
             value={value}
             toggleValue={toggleValue}
+            setBoardId={setBoardId}
+            openedBoardId={openedBoardId}
+            openNewBoardModal={openNewBoardModal}
           ></Sidebar>
         )}
-        <div className="flex-1 pl-6 overflow-auto h-full">{children}</div>
+
+        <div className="flex-1 overflow-auto h-full">{children}</div>
       </div>
     </div>
   );
