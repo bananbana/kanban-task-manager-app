@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BoardData } from "../types/BoardTypes";
 import axios from "axios";
-import useBoards from "../assets/hooks/useBoards";
+import useBoards from "../assets/hooks/useBoard";
 import useCloseModal from "../assets/hooks/useCloseModal";
 import { useRef } from "react";
-import useBoardDetails from "../assets/hooks/useBoardsDetails";
+import useBoardDetails from "../assets/hooks/useBoard";
 import { TaskData } from "../types/TaskTypes";
 
 interface ConfirmDeleteModalProps {

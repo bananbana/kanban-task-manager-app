@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import useCloseModal from "../assets/hooks/useCloseModal";
+import useCloseModal from "../assets/hooks/useCloseMenu";
 import InputAndDelete from "./InputAndDelete";
-import useBoards from "../assets/hooks/useBoards";
-import useBoardDetails from "../assets/hooks/useBoardsDetails";
+import useBoards from "../assets/hooks/useBoard";
+import useBoardDetails from "../assets/hooks/useBoard";
 import useBoardMutation from "../assets/hooks/useMutateBoard";
 
 interface BoardModalProps {
@@ -61,6 +61,7 @@ const BoardModal = ({
 
   const modalRef = useRef<HTMLDivElement>(null);
   useCloseModal(modalRef, onClose);
+
   const openedBoard = data?.find((board) => board.id === openedBoardId);
   const [columns, setColumns] = useState([{ id: 1, value: "" }]);
   const [name, setName] = useState<string>(openedBoard ? openedBoard.name : "");
@@ -142,7 +143,7 @@ const BoardModal = ({
             type="text"
             value={name}
             onChange={handleNameChange}
-            className={`border rounded-md w-full h-10 px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-lig`}
+            className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
           ></input>
         </div>
         <div className="w-full flex items-start flex-col gap-3">
@@ -151,13 +152,13 @@ const BoardModal = ({
             {(createBoardModal && "Columns") ||
               (editBoardModal && "Board Columns")}
           </label>
-          {columns.map((columns_) => (
+          {columns.map((column) => (
             <InputAndDelete
-              key={columns_.id}
-              id={columns_.id}
-              value={columns_.value}
-              onChange={handleColumnsChange}
-              handleRemove={handleRemove}
+              key={column.id}
+              id={column.id}
+              value={column.value}
+              // onChange={handleColumnsChange}
+              // handleRemove={handleRemove}
             />
           ))}
         </div>

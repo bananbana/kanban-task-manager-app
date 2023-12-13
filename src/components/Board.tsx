@@ -1,8 +1,7 @@
-import axios from "axios";
 import Column from "./Column";
 import BoardEmpty from "./BoardEmpty";
 import Task from "./Task";
-import useBoardDetails from "../assets/hooks/useBoardsDetails";
+import useBoardDetails from "../assets/hooks/useBoard";
 
 interface BoardProps {
   openedBoardId: number;
@@ -12,35 +11,7 @@ interface BoardProps {
 
 const Board = ({ openedBoardId, openTask, openEditBoardModal }: BoardProps) => {
   const boardDetails = useBoardDetails(openedBoardId);
-  const {
-    statusCodesData,
-    tasksData,
-    statusCodesLoading,
-    tasksLoading,
-    statusCodesError,
-    tasksError,
-  } = boardDetails;
-  if (statusCodesLoading || tasksLoading) {
-    return <div>Loading...</div>; // Handle loading state
-  }
-
-  if (statusCodesError) {
-    return (
-      <div>
-        Error fetching status codes:{" "}
-        {axios.isAxiosError(statusCodesError) && statusCodesError.message}
-      </div>
-    ); // Handle error state
-  }
-
-  if (tasksError) {
-    return (
-      <div>
-        Error fetching tasks:{" "}
-        {axios.isAxiosError(tasksError) && tasksError.message}
-      </div>
-    ); // Handle error state
-  }
+  const { statusCodesData, tasksData } = boardDetails;
 
   return (
     <div className="dark:text-white text-black h-full overflow-hidden">
@@ -61,7 +32,7 @@ const Board = ({ openedBoardId, openTask, openEditBoardModal }: BoardProps) => {
                 >
                   {tasksData !== undefined &&
                     tasksData
-                      .filter((tasks) => tasks.statusId === status.id)
+                      .filter((task) => task.statusId === status.id)
                       .map((task) => {
                         return (
                           <Task

@@ -1,9 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { SubtaskData } from "../../types/SubtaskTypes";
+import { useParams } from "react-router-dom";
 
-const useUpdateSubtask = (taskId: number) => {
+const useUpdateSubtask = () => {
   const queryClient = useQueryClient();
+  const { taskId } = useParams();
+  console.log(taskId);
 
   const toggleSubtask = useMutation(
     async (variables: SubtaskData) => {
@@ -55,8 +58,8 @@ const useUpdateSubtask = (taskId: number) => {
           );
         }
       },
-      onSettled: async () => {
-        await queryClient.invalidateQueries(["subtasks", taskId]);
+      onSuccess: () => {
+        void queryClient.invalidateQueries(["tasks", taskId]);
       },
     }
   );

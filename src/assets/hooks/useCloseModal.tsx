@@ -1,13 +1,14 @@
 import { useEffect } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 const useCloseModal = (
   ref: React.RefObject<HTMLElement>,
-  onClose: () => void
+  onClose: NavigateFunction
 ) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        onClose();
+        onClose(-1);
       }
     };
 

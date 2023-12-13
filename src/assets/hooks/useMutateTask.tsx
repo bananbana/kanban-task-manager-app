@@ -1,12 +1,8 @@
 import axios from "axios";
 import { CreateTaskData, EditTaskData, TaskData } from "../../types/TaskTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  DeleteSubtaskData,
-  EditSubtaskFormData,
-  SubtaskData,
-  SubtaskFormData,
-} from "../../types/SubtaskTypes";
+import { SubtaskData } from "../../types/SubtaskTypes";
+import { authHeader } from "../../services/auth-header";
 
 const useTaskMutation = () => {
   const queryClient = useQueryClient();
@@ -14,81 +10,22 @@ const useTaskMutation = () => {
   const createTaskMutation = useMutation({
     mutationFn: async (data: CreateTaskData) => {
       const response = await axios.post<TaskData>(
-        `http://localhost:8080/boards/${data.boardId}/tasks`,
+        `http://localhost:8080/user/boards/${data.boardId}/tasks`,
         {
           title: data.title,
           description: data.description,
           statusId: data.statusId,
           subtasks: data.subtaskTitles,
-        }
+        },
+        { headers: authHeader() }
       );
       return response.data;
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries(["tasks"]);
+    onSuccess: (data) => {
+      void queryClient.refetchQueries(["boards", data.boardId.toString()]);
     },
     onError: (error) => {
       console.error("Error creating task:", error);
-    },
-  });
-
-  const editTaskMutation = useMutation({
-    mutationFn: async (data: EditTaskData) => {
-      const response = await axios.put<TaskData>(
-        `http://localhost:8080/boards/${data.boardId}/tasks/${data.taskId}`,
-        {
-          title: data.title,
-          description: data.description,
-          statusId: data.statusId,
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries(["tasks"]);
-    },
-    onError: (error) => {
-      console.error("Error editing task:", error);
-    },
-  });
-
-  const addSubtaskMutation = useMutation({
-    mutationFn: async (data: SubtaskFormData) => {
-      const response = await axios.post<SubtaskData>(
-        `http://localhost:8080/tasks/${data.taskId}/subtasks`,
-        {
-          taskId: data.taskId,
-          title: data.title,
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries(["tasks"]);
-    },
-  });
-
-  const editSubtaskMutation = useMutation({
-    mutationFn: async (data: EditSubtaskFormData) => {
-      const response = await axios.put<SubtaskData>(
-        `http://localhost:8080/tasks/${data.taskId}/subtasks/${data.id}`,
-        {
-          title: data.title,
-          taskId: data.taskId,
-        }
-      );
-      return response.data;
-    },
-  });
-
-  const deleteSubtaskMutation = useMutation({
-    mutationFn: async (data: DeleteSubtaskData) => {
-      await axios.delete<SubtaskData>(
-        `http://localhost:8080/tasks/${data.taskId}/subtasks/${data.id}`
-      );
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries(["boards"]);
     },
   });
 
@@ -96,27 +33,149 @@ const useTaskMutation = () => {
     createTaskMutation.mutate(data);
   };
 
+  const editTaskMutation = useMutation({
+    mutationFn: async (data: EditTaskData) => {
+      const response = await axios.put<TaskData>(
+        `http://localhost:8080/user/boards/${data.boardId}/tasks/${data.taskId}`,
+        {
+          title: data.title,
+          description: data.description,
+          statusId: data.statusId,
+        },
+        { headers: authHeader() }
+      );
+      return response.data;
+    },
+    onError: (error) => {
+      console.error("Error editing task:", error);
+    },
+  });
+
   const editTaskHandler = (data: EditTaskData) => {
     editTaskMutation.mutate(data);
   };
 
-  const addSubtaskHandler = (data: SubtaskFormData) => {
+  const addSubtaskMutation = useMutation({
+    mutationFn: async (data: { taskId: number; title: string }) => {
+      const response = await axios.post<SubtaskData>(
+        `http://localhost:8080/user/tasks/${data.taskId}/subtasks`,
+        {
+          taskId: data.taskId,
+          title: data.title,
+        },
+        { headers: authHeader() }
+      );
+      return response.data;
+    },
+  });
+
+  const addSubtaskHandler = (data: { taskId: number; title: string }) => {
     addSubtaskMutation.mutate(data);
   };
 
-  const editSubtaskHandler = (data: EditSubtaskFormData) => {
+  const editSubtaskMutation = useMutation({
+    mutationFn: async (data: { taskId: number; id: number; title: string }) => {
+      const response = await axios.put<SubtaskData>(
+        `http://localhost:8080/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        {
+          title: data.title,
+          taskId: data.taskId,
+        },
+        { headers: authHeader() }
+      );
+      return response.data;
+    },
+  });
+
+  const editSubtaskHandler = (data: {
+    taskId: number;
+    id: number;
+    title: string;
+  }) => {
     editSubtaskMutation.mutate(data);
   };
 
-  const deleteSubtaskHandler = (data: DeleteSubtaskData) => {
+  const toggleSubtaskMutation = useMutation({
+    mutationFn: async (data: SubtaskData) => {
+      const response = await axios.put<SubtaskData>(
+        `http://localhost:8080/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        {
+          title: data.title,
+          taskId: data.taskId,
+          id: data.id,
+          isCompleted: data.isCompleted,
+        },
+        { headers: authHeader() }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      void queryClient.invalidateQueries(["tasks", data.taskId.toString()]);
+    },
+  });
+
+  const toggleSubtaskHandler = (data: SubtaskData) => {
+    toggleSubtaskMutation.mutate(data);
+  };
+
+  const deleteSubtaskMutation = useMutation({
+    mutationFn: async (data: { taskId: number; id: number }) => {
+      await axios.delete<SubtaskData>(
+        `http://localhost:8080/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        { headers: authHeader() }
+      );
+    },
+  });
+
+  const deleteSubtaskHandler = (data: { taskId: number; id: number }) => {
     deleteSubtaskMutation.mutate(data);
   };
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: async (data: { taskId: number; boardId: number }) => {
+      await axios.delete<TaskData>(
+        `http://localhost:8080/user/boards/${data.boardId}/tasks/${data.taskId}`,
+        { headers: authHeader() }
+      );
+    },
+  });
+
+  const deleteTaskHandler = (data: { taskId: number; boardId: number }) => {
+    deleteTaskMutation.mutate(data);
+  };
+
+  const editStatusMutation = useMutation({
+    mutationFn: async (data: {
+      boardId: number;
+      taskId: number;
+      statusId?: number;
+    }) => {
+      const response = await axios.put(
+        `http://localhost:8080/user/boards/${data.boardId}/tasks/${data.taskId}/new_status/${data.statusId}`,
+        {},
+        { headers: authHeader() }
+      );
+      return response;
+    },
+  });
+
+  const editStatusHandler = (data: {
+    boardId: number;
+    taskId: number;
+    statusId?: number;
+  }) => {
+    editStatusMutation.mutate(data);
+  };
+
   return {
     createTask: createTaskHandler,
     editTask: editTaskHandler,
     addSubtaskToTask: addSubtaskHandler,
     editSubtask: editSubtaskHandler,
     deleteSubtask: deleteSubtaskHandler,
+    toggleSubtask: toggleSubtaskHandler,
+    deleteTask: deleteTaskHandler,
+    editStatus: editStatusHandler,
   };
 };
 

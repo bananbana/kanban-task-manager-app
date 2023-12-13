@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import useCloseModal from "../assets/hooks/useCloseModal";
-import useBoardDetails from "../assets/hooks/useBoardsDetails";
+import useBoardDetails from "../assets/hooks/useBoard";
 import DropdownMenu from "./DropDownMenu";
 import InputAndDelete from "./InputAndDelete";
 import useTaskMutation from "../assets/hooks/useMutateTask";
@@ -170,25 +170,18 @@ const NewTaskModal = ({
               required
               autoFocus
               onChange={handleTitleChange}
-              className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
+              className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
             ></input>
           </div>
           <div className="pb-6">
             <label className="text-body-m text-medium-grey pb-2">
               Description
             </label>
-            {/* <input
-              type="text"
-              placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
-              value={description}
-              onChange={handleDescriptionChange}
-              className={`border rounded-md w-full h-[112px] px-2 focus:outline-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all`}
-            ></input> */}
             <textarea
               placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
               value={description}
               onChange={handleDescriptionChange}
-              className={`border rounded-md w-full h-[112px] px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all`}
+              className={`border rounded-md w-full h-[112px] px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all hover:border-main-purple dark:hover:border-main-purple`}
               style={{ resize: "none" }}
             ></textarea>
           </div>

@@ -3,9 +3,8 @@ import axios from "axios";
 import { TaskData } from "../../types/TaskTypes";
 import { SubtaskData } from "../../types/SubtaskTypes";
 
-const useTask = (taskId: number, boardId: number) => {
+const useTask = (boardId: number, taskId: number) => {
   const queryClient = useQueryClient();
-
   const taskQuery = useQuery({
     queryKey: ["tasks", taskId, boardId],
     queryFn: async () => {
@@ -22,13 +21,13 @@ const useTask = (taskId: number, boardId: number) => {
       const { data } = await axios.get<SubtaskData[]>(
         `http://localhost:8080/tasks/${taskId}/subtasks`
       );
-      return { subtaskData: data };
+      return { subtasks: data };
     },
   });
 
   return {
     taskData: taskQuery.data?.taskData,
-    subtaskData: subtaskQuery.data?.subtaskData,
+    subtasks: subtaskQuery.data?.subtasks,
     taskLoading: taskQuery.isLoading,
     subtaskLoading: subtaskQuery.isLoading,
     taskError: taskQuery.error,

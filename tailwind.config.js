@@ -2,7 +2,7 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{html,js,jsx,tsx}",
+    "./src/**/*.{html,js,jsx,tsx,ts}",
     "./node_modules/flowbite/**/*.js",
   ],
   darkMode: "class",
@@ -20,6 +20,9 @@ export default {
       "light-grey": "#F4F7FD",
       "destructive-red": "#EA5555",
       "red-hover": "#FF9898",
+      "light-blue": "#48c3e5",
+      "light-green": "#67e2ae",
+      "light-pink": "#f083f0",
     },
     fontSize: {
       "heading-xl": ["24px", { lineHeight: "30px", fontWeight: "bold" }],
@@ -32,15 +35,16 @@ export default {
       "body-l": ["13px", { lineHeight: "23px", fontWeight: "medium" }],
       "body-m": ["12px", { lineHeight: "15px", fontWeight: "bold" }],
     },
-    fill: {
-      current: "currentColor",
-    },
     fill: (theme) => ({
+      red: theme("colors.destructive-red"),
       grey: theme("colors.medium-grey"),
       white: theme("colors.white"),
       purple: theme("colors.main-purple"),
       "light-grey": theme("colors.light-grey"),
       "light-purple": theme("colors.main-purple-hover"),
+      "light-blue": theme("colors.light-blue"),
+      "light-green": theme("colors.light-green"),
+      "light-pink": theme("colors.light-pink"),
     }),
     extend: {},
   },

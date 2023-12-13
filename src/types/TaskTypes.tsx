@@ -1,10 +1,18 @@
+import { SubtaskData } from "./SubtaskTypes";
+
 export type TaskData = {
   id: number;
   title: string;
   description: string;
   statusId: number;
   subtasks: number[];
+  completedSubtasks: number[];
   boardId: number;
+};
+
+export type TaskDetails = {
+  task: TaskData;
+  subtasks: SubtaskData[];
 };
 
 export type EditTaskData = {

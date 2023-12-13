@@ -1,6 +1,7 @@
 interface InputAndDeleteProps {
   id: number;
   value: string;
+  name: string;
   onChange: (id: number, value: string) => void;
   handleRemove: (id: number) => void;
 }
@@ -8,6 +9,7 @@ interface InputAndDeleteProps {
 const InputAndDelete = ({
   id,
   value,
+  name,
   onChange,
   handleRemove,
 }: InputAndDeleteProps) => {
@@ -19,11 +21,13 @@ const InputAndDelete = ({
     <div className="w-full flex flex-row items-center pb-3" key={id}>
       <input
         type="text"
-        value={value}
+        defaultValue={value}
+        name={name}
         onChange={handleChange}
-        className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light`}
+        className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
       ></input>
       <button
+        type="button"
         className="group flex justify-center items-center px-2 h-10 hover:cursor-pointer"
         onClick={() => handleRemove(id)}
       >
