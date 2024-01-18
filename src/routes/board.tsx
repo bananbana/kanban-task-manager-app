@@ -20,6 +20,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { TaskData } from "../types/TaskTypes";
 import useTaskMutation from "../assets/hooks/useMutateTask";
+import { BeatLoader } from "react-spinners";
 
 const boardQuery = (q?: string) => ({
   queryKey: ["boards", q ?? q],
@@ -44,7 +45,12 @@ const Board = () => {
   const { editStatus } = useTaskMutation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        {" "}
+        <BeatLoader color="#635FC7" />
+      </div>
+    );
   }
 
   if (isError) {
@@ -94,6 +100,7 @@ const Board = () => {
 
     const isActiveATask = active.data.current?.type === "Task";
     const isOverAColumn = over.data.current?.type === "Column";
+    const isOverATask = over.data.current?.type === "Task";
 
     if (!isActiveATask) return;
 
@@ -101,21 +108,29 @@ const Board = () => {
       void queryClient.invalidateQueries(["boards", boardId]);
       activeTask &&
         handleEditTask(activeTask.boardId, activeTask.id, overId as number);
+    } else if (isActiveATask && isOverATask) {
+      const overColumnId = tasks?.find((task) => task.id === over.id)?.statusId;
+      void queryClient.invalidateQueries(["boards", boardId]);
+      activeTask &&
+        handleEditTask(activeTask.boardId, activeTask.id, overColumnId);
     }
   };
 
   if (!statusCodes?.length) {
     return (
-      <div>
+      <div
+        className="w-full h-full flex justify-center items-center"
+        id="empty-board-container"
+      >
         <div
           id="board-empty"
-          className="bg-none h-fit flex flex-col items-center justify-self-center absolute left-1/3"
+          className="bg-none h-fit flex flex-col items-center absolute"
         >
           <p className="text-medium-grey text-heading-l pb-4">
             This board is empty. Create a new column to get started.
           </p>
-          <NavLink to={`/boards/${boardId}/edit`}>
-            <div className="h-[48px] hover:bg-main-purple-hover bg-main-purple text-white rounded-full w-[174px] text-heading-m flex justify-center items-center">
+          <NavLink to={`/user/boards/${boardId}/edit`}>
+            <div className="py-4 px-3 hover:bg-main-purple-hover bg-main-purple text-white rounded-full text-heading-m flex justify-center items-center">
               <h3>+ Add New Column</h3>
             </div>
           </NavLink>
@@ -195,7 +210,7 @@ const Board = () => {
           </div>
         </div>
       </div>
-      <div id="board-detail">
+      <div id="board-detail" className="w-screen">
         <Outlet />
       </div>
     </div>

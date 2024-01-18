@@ -16,11 +16,20 @@ import NewTask from "./routes/newTask";
 import NewBoard from "./routes/newBoard";
 import Login from "./routes/login";
 import Register from "./routes/register";
-import BoardAdmin from "./components/AdminBoard";
+import BoardAdmin from "./routes/adminBoard";
 import Privacy from "./routes/privacy";
-import AccountSettings from "./routes/AccountSettings";
+import AccountSettings from "./routes/accountSettings";
+import { currentUserSignal } from "./userSignal";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
+
+const user = currentUserSignal.value;
 const router = createBrowserRouter([
   {
     path: "/",
@@ -31,41 +40,55 @@ const router = createBrowserRouter([
         index: true,
         element: <Index />,
       },
-      { path: "/login", element: <Login /> },
-      { path: "/register", element: <Register /> },
-      { path: "/user/boards/new", element: <NewBoard /> },
-      { path: "/admin", element: <BoardAdmin /> },
-      { path: "/account_settings", element: <AccountSettings /> },
-      { path: "/privacy_settings", element: <Privacy /> },
-
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "user/boards/new", element: <NewBoard /> },
       {
-        path: "/user/boards/:boardId",
-        element: <Board />,
-        children: [
-          {
-            path: "tasks/:taskId",
-            element: <Task />,
-          },
-
-          {
-            path: "tasks/:taskId/edit",
-            element: <EditTask />,
-          },
-          {
-            path: "edit",
-            element: <EditBoard />,
-          },
-          {
-            path: "tasks/new",
-            element: <NewTask />,
-          },
-
-          {
-            path: "new",
-            element: <NewBoard />,
-          },
-        ],
+        path: "admin",
+        element: user?.roles?.includes("ROLE_ADMIN") ? (
+          <BoardAdmin />
+        ) : (
+          <ErrorPage />
+        ),
       },
+      {
+        path: "account_settings",
+        element: user ? <AccountSettings /> : <ErrorPage />,
+      },
+      {
+        path: "privacy_settings",
+        element: user ? <Privacy /> : <ErrorPage />,
+      },
+      user
+        ? {
+            path: "user/boards/:boardId",
+            element: <Board />,
+            children: [
+              {
+                path: "tasks/:taskId",
+                element: <Task />,
+              },
+
+              {
+                path: "tasks/:taskId/edit",
+                element: <EditTask />,
+              },
+              {
+                path: "edit",
+                element: <EditBoard />,
+              },
+              {
+                path: "tasks/new",
+                element: <NewTask />,
+              },
+
+              {
+                path: "new",
+                element: <NewBoard />,
+              },
+            ],
+          }
+        : { element: <ErrorPage /> },
     ],
   },
 ]);
@@ -73,7 +96,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      {/* <App /> */}
       <ReactQueryDevtools />
       <RouterProvider router={router} />
     </QueryClientProvider>

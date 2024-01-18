@@ -31,7 +31,7 @@ const Index = () => {
             Create a new board or select one from the list to get started
           </p>
           <NavLink to={"/user/boards/new"}>
-            <div className="h-12 hover:bg-main-purple-hover bg-main-purple text-white rounded-full text-heading-m flex justify-center items-center px-4 py-2">
+            <div className="h-12 btn-primary-l p-4">
               <h3>+ Add New Board</h3>
             </div>
           </NavLink>
@@ -39,20 +39,16 @@ const Index = () => {
       ) : (
         <div
           id="auth-modal"
-          className="flex flex-col dark:bg-very-dark-grey dark:text-white bg-white rounded-lg p-4 shadow-md"
+          className="flex flex-col dark:bg-very-dark-grey dark:text-white bg-white rounded-lg p-4 shadow-md mt-28"
         >
           <p>Log in or create an account to begin</p>
 
           <div className="flex justify-around w-full mt-3">
             <NavLink to={"/login"}>
-              <div className="hover:bg-main-purple-hover bg-main-purple text-white rounded-full text-heading-m flex justify-center items-center py-2 px-4">
-                Login
-              </div>
+              <div className="btn-primary-s">Login</div>
             </NavLink>
             <NavLink to={"/register"}>
-              <div className=" hover:bg-main-purple-hover bg-main-purple text-white rounded-full text-heading-m flex justify-center items-center py-2 px-4">
-                Sign up
-              </div>
+              <div className="btn-primary-s">Sign up</div>
             </NavLink>
           </div>
         </div>

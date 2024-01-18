@@ -9,6 +9,10 @@ import { BoardDetails } from "../types/BoardTypes";
 import { Listbox, Transition } from "@headlessui/react";
 import { StatusCodes } from "../types/StatusTypes";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import Linkify from "linkify-react";
+import { IconBackMobile } from "../assets/images/IconBackMobile";
+import { IconChevronUp } from "../assets/images/IconChevronUp";
+import { IconChevronDown } from "../assets/images/IconChevronDown";
 
 const EditTask = () => {
   const { boardId, taskId } = useParams();
@@ -132,44 +136,65 @@ const EditTask = () => {
       });
     }
     void queryClient.refetchQueries(["boards", boardId]);
+    void queryClient.refetchQueries(["tasks", taskId]);
+    console.log(taskId);
+  };
+
+  const goBack = () => {
+    navigate(-1);
   };
   return (
-    <div className="h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 flex justify-center items-center">
+    <div className="backdrop-overlay" id="backdrop">
       <div
         id="edit-task-modal"
         ref={modalRef}
-        className={`px-8 absolute z-20 h-fit overflow-auto rounded-lg w-[480px] dark:bg-dark-grey dark:text-white bg-white text-b`}
+        className={`edit-modal relative`}
       >
-        <p className="text-heading-l pt-8">Edit Task</p>
-        <Form method="put" id="edit-task-form" onSubmit={handleSubmit}>
-          <div className="flex flex-col pt-6">
-            <div className="pb-6">
-              <label className="text-body-m text-medium-grey pb-2">Title</label>
-              <input
-                type="text"
-                placeholder="e.g. Take coffee break"
-                value={title}
-                required
-                autoFocus
-                onChange={handleTitleChange}
-                className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
-              ></input>
-            </div>
-            <div className="pb-6">
-              <label className="text-body-m text-medium-grey pb-2">
-                Description
-              </label>
-              <textarea
-                placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
-                defaultValue={description}
-                name="description"
-                onChange={handleDescriptionChange}
-                className={`border rounded-md w-full h-[112px] px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all hover:border-main-purple dark:hover:border-main-purple`}
-                style={{ resize: "none" }}
-              ></textarea>
-            </div>
+        <div className="my-6 px-6 flex tablet:flex-row phone:flex-row-reverse justify-between">
+          <button onClick={goBack} className="tablet:hidden phone:block">
+            <IconBackMobile />
+          </button>
+          <h1 className="text-heading-l">Edit Task</h1>
+        </div>
+
+        <Form
+          method="put"
+          id="edit-task-form"
+          onSubmit={handleSubmit}
+          className="form px-6"
+        >
+          <div className="flex flex-col w-full gap-3">
+            <Linkify>
+              <div>
+                <label className="text-body-m text-medium-grey mb-2">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Take coffee break"
+                  value={title}
+                  required
+                  autoFocus
+                  onChange={handleTitleChange}
+                  className="form-input"
+                />
+              </div>
+              <div>
+                <label className="text-body-m text-medium-grey mb-2 dark:text-white">
+                  Description
+                </label>
+                <textarea
+                  placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
+                  defaultValue={description}
+                  name="description"
+                  onChange={handleDescriptionChange}
+                  className={`h-[112px] form-input`}
+                  style={{ resize: "none" }}
+                />
+              </div>
+            </Linkify>
             <div className="">
-              <label className="text-body-m text-medium-grey pb-2">
+              <label className="text-body-m text-medium-grey mb-2">
                 Subtasks
               </label>
               {subtasksData?.map((subtask) => (
@@ -183,7 +208,7 @@ const EditTask = () => {
                 />
               ))}
               <button
-                className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
+                className={`w-full h-[40px] btn-secondary my-3`}
                 type="button"
                 onClick={addSubtask}
               >
@@ -191,13 +216,11 @@ const EditTask = () => {
               </button>
             </div>
             <Listbox value={selectedStatus} onChange={setSelectedStatus}>
-              <div className="relative mt-6">
-                <Listbox.Label className="text-body-m text-medium-grey pb-2 dark:text-white">
+              <div className="relative mt-3">
+                <Listbox.Label className="text-body-m text-medium-grey mb-2 dark:text-white">
                   Status
                 </Listbox.Label>
-                <Listbox.Button
-                  className={`relative w-full cursor-default p-4 rounded-md text-body-l h-[40px] border border-lines-light dark:border-lines-dark text-left focus:outline-none focus-visible:border-main-purple dark:focus:border-main-purple flex items-center justify-start hover:border-main-purple dark:hover:border-main-purple`}
-                >
+                <Listbox.Button className={`listbox-button`}>
                   {({ open }) => (
                     <>
                       <span className="block truncate w-full text-black dark:text-white">
@@ -205,18 +228,7 @@ const EditTask = () => {
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2" />
                       <div className="">
-                        <svg
-                          width="10"
-                          height="7"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke="#635FC7"
-                            strokeWidth="2"
-                            fill="none"
-                            d={open ? "M9 6 5 2 1 6" : "m1 1 4 4 4-4"}
-                          />
-                        </svg>
+                        {open ? <IconChevronUp /> : <IconChevronDown />}
                       </div>
                     </>
                   )}
@@ -227,12 +239,12 @@ const EditTask = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="listbox-options translate-x-0 top-full">
                     {statusCodes?.map((status) => (
                       <Listbox.Option
                         key={status.id}
                         className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                          `relative  cursor-default select-none py-2 pl-10 pr-4 ${
                             active
                               ? "bg-main-purple-hover text-white"
                               : "text-medium-grey"
@@ -265,14 +277,12 @@ const EditTask = () => {
                 </Transition>
               </div>
             </Listbox>
-            <div className="w-full mb-8 mt-6">
-              <button
-                className="w-full h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l"
-                type="submit"
-              >
-                Save Changes
-              </button>
-            </div>
+            <button
+              className="w-full h-[40px] btn-primary-s my-6"
+              type="submit"
+            >
+              Save Changes
+            </button>
           </div>
         </Form>
       </div>

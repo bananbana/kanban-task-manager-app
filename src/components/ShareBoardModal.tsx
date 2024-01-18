@@ -5,6 +5,9 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import useBoardMutation from "../assets/hooks/useMutateBoard";
 import { getUsers } from "../users";
 import { useQuery } from "@tanstack/react-query";
+import authService from "../services/auth.service";
+import { IconChevronDown } from "../assets/images/IconChevronDown";
+import { IconChevronUp } from "../assets/images/IconChevronUp";
 
 interface ShareBoardModalProps {
   isOpen: boolean;
@@ -17,6 +20,7 @@ interface ShareBoardModalProps {
 const userQuery = () => ({
   queryKey: ["users"],
   queryFn: () => getUsers(),
+  enabled: !!authService.getCurrentUser(),
 });
 
 const ShareBoardModal = ({
@@ -103,18 +107,7 @@ const ShareBoardModal = ({
                           </span>
                           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2" />
                           <div className="">
-                            <svg
-                              width="10"
-                              height="7"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                stroke="#635FC7"
-                                strokeWidth="2"
-                                fill="none"
-                                d={open ? "M9 6 5 2 1 6" : "m1 1 4 4 4-4"}
-                              />
-                            </svg>
+                            {open ? <IconChevronUp /> : <IconChevronDown />}
                           </div>
                         </>
                       )}

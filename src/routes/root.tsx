@@ -10,18 +10,20 @@ import EventBus from "../common/EventBus";
 import AuthService from "../services/auth.service";
 import { authHeader } from "../services/auth-header";
 import { UserType } from "../types/UserType";
+import { currentUserSignal } from "../userSignal";
+import authService from "../services/auth.service";
+import { IconShowSidebar } from "../assets/images/IconShowSidebar";
 
 const boardsListQuery = () => ({
   queryKey: ["boards"],
   queryFn: () => getBoards(),
+  enabled: !!authService.getCurrentUser(),
 });
 
 const Root = () => {
   const queryClient = useQueryClient();
-
   const { data: boards } = useQuery(boardsListQuery());
   const { boardId } = useParams();
-
   const users = queryClient.getQueryData<UserType[]>(["users"]);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -36,15 +38,27 @@ const Root = () => {
     AuthService.logout();
     setCurrentUser(undefined);
     setCurrentUserName(undefined);
+    console.log("logout");
   };
 
-  useEffect(() => {
+  const onSetUser = (): void => {
     const user = AuthService.getCurrentUser();
 
     if (user && user.roles) {
+      currentUserSignal.value = user;
       setCurrentUser(user);
       setCurrentUserName(user.username);
     }
+  };
+
+  useEffect(() => {
+    if (!currentUser) {
+      onSetUser();
+    }
+
+    EventBus.on("login", () => {
+      onSetUser();
+    });
 
     const handleLogout = () => {
       logOut();
@@ -55,7 +69,7 @@ const Root = () => {
     return () => {
       EventBus.remove("logout", handleLogout);
     };
-  }, [queryClient]);
+  }, [currentUser]);
 
   useEffect(() => {
     parent.current && autoAnimate(parent.current);
@@ -99,16 +113,14 @@ const Root = () => {
       >
         {sidebarHidden && (
           <button
-            className="fixed left-0 z-50 w-14 h-12 rounded-r-full bg-main-purple hover:bg-main-purple-hover bottom-8  items-center"
+            className="hidden tablet:block fixed left-0 z-50 w-14 h-12 rounded-r-full bg-main-purple hover:bg-main-purple-hover bottom-8 pl-4 items-center"
             onClick={toggleSidebar}
+            id="show-sidebar-btn"
           >
-            <img
-              src="/src/assets/images/icon-show-sidebar.svg"
-              alt="show-sidebar-btn"
-              className="pl-[18px]"
-            />
+            <IconShowSidebar />
           </button>
         )}
+
         <div id="app" className="flex h-full w-screen flex-col absolute z-0">
           <div id="header" className={`h-24 sticky z-10`}>
             <Header
@@ -120,11 +132,15 @@ const Root = () => {
               currentUserName={currentUserName}
               currentUser={currentUser}
               users={users}
+              toggleSidebar={toggleSidebar}
             />
           </div>
-          <div className="flex flex-row h-full overflow-auto" ref={parent}>
+          <div className={`flex h-full overflow-auto`} ref={parent}>
             {!sidebarHidden && (
-              <div id="sidebar" className={"flex h-full"}>
+              <div
+                id="sidebar"
+                className={`tablet:flex phone:hidden tablet:h-full`}
+              >
                 <Sidebar
                   currentUser={currentUser}
                   value={isDarkTheme}
@@ -144,6 +160,23 @@ const Root = () => {
               id="detail"
               className="flex justify-start flex-1 h-full w-screen overflow-auto items-center"
             >
+              {!sidebarHidden && (
+                <div className="phone:flex tablet:hidden mt-16 h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 justify-center">
+                  <Sidebar
+                    currentUser={currentUser}
+                    value={isDarkTheme}
+                    hideSidebar={toggleSidebar}
+                    toggleValue={changeTheme}
+                    allBoards={boards}
+                    boardId={boardId}
+                    username={currentUser?.username}
+                    logOut={() => {
+                      logOut();
+                      navigate("/login");
+                    }}
+                  />
+                </div>
+              )}
               <Outlet />
             </div>
           </div>

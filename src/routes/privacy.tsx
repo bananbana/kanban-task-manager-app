@@ -1,20 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PrivacyModal from "../components/PrivacyModal";
 import { useQueryClient } from "@tanstack/react-query";
 import { BoardData } from "../types/BoardTypes";
 import { UserType } from "../types/UserType";
-import AuthService from "../services/auth.service";
-import IUser from "../types/user.type";
+import useUserMutation from "../assets/hooks/useUserMutation";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { currentUserSignal } from "../userSignal";
+import { IconChevronRight } from "../assets/images/IconChevronRight";
 
 const Privacy = () => {
   const queryClient = useQueryClient();
+  const { denyUserAccess, changePassword, removeBoardAccess } =
+    useUserMutation();
+  const [parent] = useAutoAnimate();
+  const [list] = useAutoAnimate();
   const boards = queryClient.getQueryData<BoardData[]>(["boards"]);
   const users = queryClient.getQueryData<UserType[]>(["users"]);
   const [isOpen, setIsOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [yourBoardsModalOpen, setYourBoardsModalOpen] = useState(false);
   const [sharedBoardsModalOpen, setSharedBoardsModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+  const currentUser = currentUserSignal.value;
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+
+  const ownedBoards = boards?.filter(
+    (board) => board.ownerId === currentUser?.id
+  );
 
   const openModal = (modalType: string) => {
     if (modalType === "password") {
@@ -35,117 +47,102 @@ const Privacy = () => {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) setCurrentUser(user);
-  }, []);
+  const handleRemoveUser = (userId: number, boardId: number) => {
+    denyUserAccess({ userId, boardId });
+  };
 
-  console.log(currentUser);
+  const handlePasswordValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOldPassword(e.target.value);
+  };
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value);
+  };
 
+  const handleChangePassword = () => {
+    const id = currentUser?.id;
+    const username = currentUser?.username;
+    const email = currentUser?.email;
+    const password = oldPassword;
+    if (id && username && email && password && newPassword) {
+      changePassword({ id, newPassword, password, username, email });
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void handleChangePassword();
+  };
+
+  const handleRemoveBoardAccess = (boardId: number) => {
+    removeBoardAccess({ boardId });
+  };
   return (
     <div
       id="container"
       className="h-full w-full flex justify-start items-center flex-col"
     >
-      <header
-        id="privacy-header"
-        className="border-b-2 border-lines-light dark:border-lines-dark w-full min-h-[140px] flex items-center text-heading-xl dark:text-white"
-      >
-        <h3 id="privacy-header-content" className="ml-8">
-          Privacy settings
-        </h3>
-      </header>
-      <div className="bg-white flex flex-col w-[480px] rounded-2xl border-collapse mt-10">
-        <div
-          className="border border-collapse rounded-t-xl border-lines-light py-6 pl-6 hover:bg-main-purple-hover/70 flex w-full justify-between pr-6 dark:border-lines-dark dark:bg-very-dark-grey dark:hover:bg-main-purple dark:text-white hover:cursor-pointer items-center hover:text-white"
-          onClick={() => openModal("password")}
-        >
+      <div className="acc-main">
+        <div className="acc-compartment" onClick={() => openModal("password")}>
           <span>
             <p>Password</p>
-            <p className="text-body-m text-medium-grey font-normal pt-2">
+            <p className="text-body-m text-medium-grey group-hover:text-white font-normal pt-2">
               ********
             </p>
           </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
+          <IconChevronRight className="h-6 w-6" />
         </div>
         <div
-          className="border border-collapse border-lines-light py-6 pl-6 hover:bg-main-purple-hover/70 flex w-full justify-between pr-6 dark:border-lines-dark dark:bg-very-dark-grey dark:hover:bg-main-purple dark:text-white hover:cursor-pointer items-center hover:text-white"
+          className="acc-compartment"
           onClick={() => openModal("yourBoards")}
         >
           <span>
             <p>Your shared boards</p>
-            <p className="text-body-m text-medium-grey font-normal pt-2">
-              Boards:{" "}
-              {boards?.filter((board) => board.userIds.length > 1).length}
+            <p className="text-body-m text-medium-grey group-hover:text-white font-normal pt-2">
+              {"Boards: "}
+              {ownedBoards &&
+              ownedBoards.filter((board) => board.userIds.length > 1)
+                ? ownedBoards.filter((board) => board.userIds.length > 1).length
+                : "You don't share any boards"}
             </p>
           </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
+          <IconChevronRight className="h-6 w-6" />
         </div>
         <div
-          className="border border-collapse rounded-b-xl border-lines-light py-6 pl-6 hover:bg-main-purple-hover/70 flex w-full justify-between pr-6 dark:border-lines-dark dark:bg-very-dark-grey dark:hover:bg-main-purple dark:text-white hover:cursor-pointer items-center hover:text-white"
+          className="hover:bg-light-pink/70 dark:bg-very-dark-grey dark:hover:bg-light-pink hover:text-white group acc-compartment"
           onClick={() => openModal("sharedBoards")}
         >
           <span>
             <p>Boards shared to you</p>
-            <p className="text-body-m text-medium-grey font-normal pt-2">
-              Boards:{" "}
-              {
-                boards?.filter((board) => board.ownerId !== currentUser?.id)
-                  .length
-              }
+            <p className="text-body-m group-hover:text-white text-medium-grey font-normal pt-2">
+              {"Boards: "}
+              {boards?.filter((board) => board.ownerId !== currentUser?.id)
+                .length
+                ? boards?.filter((board) => board.ownerId !== currentUser?.id)
+                    .length
+                : "You don't have shared access to any board"}
             </p>
           </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
+          <IconChevronRight className="h-6 w-6" />
         </div>
       </div>
       <PrivacyModal
+        handleSubmit={handleSubmit}
         currentUser={currentUser}
         users={users}
+        ownedBoards={ownedBoards}
         boards={boards}
         isOpen={isOpen}
         closeModal={closeModal}
         passwordModal={passwordModalOpen}
         yourBoardsModal={yourBoardsModalOpen}
         sharedBoardsModal={sharedBoardsModalOpen}
+        removeUser={handleRemoveUser}
+        newPassword={newPassword}
+        handlePasswordValidation={handlePasswordValidation}
+        handlePasswordChange={handlePasswordChange}
+        removeBoardAccess={handleRemoveBoardAccess}
+        parent={parent}
+        usersList={list}
       />
     </div>
   );

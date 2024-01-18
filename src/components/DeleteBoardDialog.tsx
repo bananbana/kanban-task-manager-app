@@ -59,7 +59,7 @@ const DeleteUserDialog = ({
                   <div className="mt-4 flex justify-between">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-destructive-red px-4 py-2 text-sm font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-destructive-red px-4 py-2 text-sm font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-1 focus-visible:ring-destructive-red focus-visible:ring-offset-0"
                       onClick={handleDeleteBoard}
                     >
                       Delete

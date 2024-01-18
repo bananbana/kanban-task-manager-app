@@ -2,6 +2,9 @@ import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { UserType } from "../types/UserType";
 import { BoardData } from "../types/BoardTypes";
+import { IconDeleteUser } from "../assets/images/IconDeleteUser";
+import { IconChevronUp } from "../assets/images/IconChevronUp";
+import { IconChevronDown } from "../assets/images/IconChevronDown";
 
 interface ShareBoardModalProps {
   isOpen: boolean;
@@ -100,7 +103,10 @@ const ShareBoardAdminModal = ({
                     Users with access:{" "}
                     <ul key="users-list" className="mt-3">
                       {usersWithAccess?.map((user) => (
-                        <li className="text-medium-grey text-heading-m font-normal flex justify-between mt-2">
+                        <li
+                          key={user.id}
+                          className="text-medium-grey text-heading-m font-normal flex justify-between mt-2"
+                        >
                           {user.username}
                           <button
                             id="btn"
@@ -108,20 +114,7 @@ const ShareBoardAdminModal = ({
                             onClick={() => removeUser(user.id)}
                             className={`text-destructive-red hover:scale-105 disabled:hidden`}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="currentColor"
-                              className="w-6 h-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                              />
-                            </svg>
+                            <IconDeleteUser />
                           </button>
                         </li>
                       ))}
@@ -138,18 +131,7 @@ const ShareBoardAdminModal = ({
                           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2" />
                           Users
                           <div className="">
-                            <svg
-                              width="10"
-                              height="7"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                stroke="#635FC7"
-                                strokeWidth="2"
-                                fill="none"
-                                d={open ? "M9 6 5 2 1 6" : "m1 1 4 4 4-4"}
-                              />
-                            </svg>
+                            {open ? <IconChevronUp /> : <IconChevronDown />}
                           </div>
                         </>
                       )}

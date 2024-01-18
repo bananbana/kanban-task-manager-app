@@ -47,6 +47,11 @@ export default {
       "light-pink": theme("colors.light-pink"),
     }),
     extend: {},
+    screens: {
+      phone: "300px",
+      tablet: "640px",
+      pc: "1024px",
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

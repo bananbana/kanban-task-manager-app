@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import InputAndDelete from "../components/InputAndDelete";
 import useBoardMutation from "../assets/hooks/useMutateBoard";
 import { useQueryClient } from "@tanstack/react-query";
 import { BoardDetails } from "../types/BoardTypes";
 import { Dialog, Transition } from "@headlessui/react";
-import useCloseMenu from "../assets/hooks/useCloseMenu";
+import useCloseModal from "../assets/hooks/useCloseModal";
 
 const EditBoard = () => {
   const { boardId } = useParams();
@@ -15,11 +15,11 @@ const EditBoard = () => {
   const { board, statusCodes } = boardData ?? {};
   const { editBoardName, editStatus, addStatus, deleteStatus } =
     useBoardMutation();
-
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  useCloseMenu(modalRef, () => navigate(-1));
+  useCloseModal(modalRef, () => navigate(-1));
 
   //set data in state until put into request body
   const [columns, setColumns] = useState([{ id: 1, name: "" }]);
@@ -50,7 +50,6 @@ const EditBoard = () => {
       })
     );
   };
-  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [removeId, setRemoveId] = useState<number | null>(null);
 
   const openConfirmation = (id: number) => {
@@ -123,21 +122,18 @@ const EditBoard = () => {
         handleDeleteStatus(boardId, column.id)
       );
     }
-    console.log(boardId);
-    void queryClient.refetchQueries(["boards", boardId]);
+    void queryClient.invalidateQueries(["boards", boardId]);
     navigate(-1);
   };
 
   return (
-    <div className="h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 flex justify-center items-center">
-      <div
-        ref={modalRef}
-        id="edit-board-modal"
-        className={`w-[480px] h-fit overflow-hidden px-8 flex flex-col justify-center items-center rounded-lg dark:bg-dark-grey dark:text-white bg-white text-black`}
-      >
-        <h1 className="text-heading-l mt-8 mb-6 w-full">Edit Board</h1>
-        <form
-          className="w-full flex flex-col items-start overflow-scroll"
+    <div className="backdrop-overlay" id="backdrop">
+      <div ref={modalRef} id="edit-board-modal" className="edit-modal">
+        <h1 className="text-heading-l w-full px-6 my-6">Edit Board</h1>
+        <Form
+          method="put"
+          id="edit-board-form"
+          className="form px-6"
           onSubmit={handleSubmit}
         >
           <div className="w-full flex items-start flex-col gap-1 mb-6">
@@ -147,10 +143,10 @@ const EditBoard = () => {
               type="text"
               value={name}
               onChange={handleNameChange}
-              className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
+              className={`form-input`}
             ></input>
           </div>
-          <div className="w-full flex items-start flex-col gap-3">
+          <div className="w-full flex items-start flex-col gap-1">
             <label className="text-body-m text-medium-grey">
               Board Columns
             </label>
@@ -166,19 +162,16 @@ const EditBoard = () => {
             ))}
           </div>
           <button
-            className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l my-6 dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
+            className={`w-full h-[40px] btn-secondary mb-6 mt-3`}
             type="button"
             onClick={addColumns}
           >
             + Add New Column
           </button>
-          <button
-            className="w-full mb-8 h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l"
-            type="submit"
-          >
+          <button className="w-full h-[40px] btn-primary-s mb-8" type="submit">
             Save Changes
           </button>
-        </form>
+        </Form>
         {isConfirmationOpen && (
           <Transition
             ref={modalRef}
@@ -189,7 +182,7 @@ const EditBoard = () => {
             <Dialog
               as="div"
               id="confirmation-dialog"
-              className="absolute bottom-2/3 right-1/3"
+              className="absolute top-2/3"
               onClose={closeConfirmation}
             >
               <Transition.Child

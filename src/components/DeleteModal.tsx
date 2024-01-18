@@ -42,7 +42,7 @@ const DeleteModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-[480px] max-w-md transform overflow-hidden rounded-md bg-white dark:bg-dark-grey p-8 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
                   className="text-heading-l text-destructive-red"
@@ -57,9 +57,9 @@ const DeleteModal = ({
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex gap-4">
                   <button
-                    className="h-10 bg-destructive-red w-[200px] rounded-full text-white hover:bg-red-hover"
+                    className="btn-destructive w-1/2"
                     onClick={() =>
                       openedBoard &&
                       handleDeleteBoard(openedBoard.id.toString())
@@ -68,10 +68,7 @@ const DeleteModal = ({
                   >
                     Delete
                   </button>
-                  <button
-                    className="h-10 bg-light-grey w-[200px] rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
-                    onClick={closeModal}
-                  >
+                  <button className="btn-secondary w-1/2" onClick={closeModal}>
                     Cancel
                   </button>
                 </div>

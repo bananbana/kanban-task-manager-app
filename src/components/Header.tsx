@@ -8,6 +8,16 @@ import DeleteModal from "./DeleteModal";
 import ShareBoardModal from "./ShareBoardModal";
 import IUser from "../types/user.type";
 import { UserType } from "../types/UserType";
+import { useLocation } from "react-router-dom";
+import { authHeader } from "../services/auth-header";
+import { LogoLight } from "../assets/images/LogoLight";
+import { LogoDark } from "../assets/images/LogoDark";
+import { LogoMobile } from "../assets/images/LogoMobile";
+import { IconChevronDown } from "../assets/images/IconChevronDown";
+import { IconListBullet } from "../assets/images/IconListBullet";
+import { IconShareBoard } from "../assets/images/IconShareBoard";
+import { IconTrashcan } from "../assets/images/IconTrashcan";
+import { IconEdit } from "../assets/images/IconEdit";
 
 interface HeaderProps {
   isDarkTheme: boolean;
@@ -16,6 +26,7 @@ interface HeaderProps {
   currentUserName: string | undefined;
   currentUser: IUser | undefined;
   users: UserType[] | undefined;
+  toggleSidebar: () => void;
 }
 
 const Header = ({
@@ -25,10 +36,13 @@ const Header = ({
   currentUserName,
   currentUser,
   users,
+  toggleSidebar,
 }: HeaderProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { deleteBoard } = useBoardMutation();
+  const location = useLocation();
+
   const navigate = useNavigate();
 
   const closeDeleteModal = () => {
@@ -54,61 +68,94 @@ const Header = ({
   return (
     <div
       id="header"
-      className={`flex-row flex justify-between items-center h-24 dark:bg-dark-grey dark:border-lines-dark bg-white border-lines-light border-b`}
+      className={`flex justify-between items-center tablet:h-24 phone:h-16 dark:bg-dark-grey dark:border-lines-dark bg-white border-lines-light border-b`}
     >
-      <div className="flex flex-row items-center h-full">
+      <div className="flex items-center h-full">
         <div
-          className={`pl-8 pr-[114px] h-full flex items-center border-r dark:border-lines-dark border-lines-light
+          className={`hidden pl-8 pr-[114px] tablet:w-[260px] tablet:pl-[26px] tablet:pr-[81px] h-full tablet:flex items-center border-r dark:border-lines-dark border-lines-light
           ${sidebarHidden ? "px-8" : ""}
           `}
         >
-          <Link to="/">
-            <img
-              src={`/src/assets/images/${
-                isDarkTheme ? "logo-light" : "logo-dark"
-              }.svg`}
-            ></img>
-          </Link>
+          <Link to="/">{isDarkTheme ? <LogoLight /> : <LogoDark />}</Link>
         </div>
+        <Link to="/" className="tablet:hidden mx-4">
+          <LogoMobile />
+        </Link>
         {currentUser && openedBoard !== undefined && (
-          <div className="text-heading-xl items-center ml-8">
-            <h3 className={`dark:text-white text-black`}>
+          <div className="text-heading-xl items-center tablet:ml-8">
+            <h3
+              className={`dark:text-white text-black phone:flex items-center w-full`}
+            >
               {openedBoard ? openedBoard.name : ""}
+              <button
+                className="tablet:hidden ml-2 py-1"
+                onClick={toggleSidebar}
+              >
+                <IconChevronDown />
+              </button>
             </h3>
+
             {openedBoard.ownerId !== currentUser.id && (
               <h3 className="text-heading-s mt-1 text-medium-grey">
                 {
                   users?.find((user) => user.id === openedBoard?.ownerId)
                     ?.username
-                }{" "}
-                shared you this board
+                }
+                s' board
               </h3>
             )}
           </div>
-        )}
+        )}{" "}
+        {location.pathname.includes("account") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black`}>Account Settings</h3>
+            </div>
+          )}
+        {location.pathname.includes("privacy") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black`}>Privacy Settings</h3>
+            </div>
+          )}
+        {location.pathname.includes("admin") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black`}>Admin Dashboard</h3>
+            </div>
+          )}
       </div>
       <div
         id="header-btns"
-        className="h-fit flex flex-row justify-between w-fit items-center"
+        className="flex flex-row items-center w-fit mr-[30px]"
       >
-        <Link to={`user/boards/${openedBoard?.id}/tasks/new`}>
+        <Link
+          to={`user/boards/${openedBoard?.id}/tasks/new`}
+          className="h-full"
+        >
           <button
             id="add-task-btn"
-            className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-6 mx-2 h-12 max-h-12 font-medium rounded-full disabled:bg-main-purple-hover"
+            className="btn-primary-l mr-4 phone:w-12 tablet:w-fit tablet:items-center"
             disabled={!openedBoard}
           >
-            + Add New Task
+            <span className="tablet:inline hidden px-6 py-3">
+              {" "}
+              + Add New Task
+            </span>
+            <span className="tablet:hidden px-2 py-[10px]">
+              <IconListBullet />
+            </span>
           </button>
         </Link>
         <div
           id="header-more-btn"
-          className={`flex mx-2 justify-center items-center rounded-full w-fit`}
+          className={`flex justify-center items-center rounded-full`}
         >
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button
                 disabled={!openedBoard}
-                className="flex flex-col w-full justify-center dark:bg-dark-grey bg-white shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] rounded-full px-4 py-4 hover:bg-medium-grey/20 dark:hover:bg-very-dark-grey/50 focus:outline-none"
+                className="flex flex-col w-full justify-center dark:bg-dark-grey bg-white shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] rounded-full hover:bg-medium-grey/20 dark:hover:bg-very-dark-grey/50 focus:outline-none py-3 px-2"
               >
                 <IconVerticalEllipsis />
               </Menu.Button>
@@ -122,7 +169,7 @@ const Header = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 mt-4 pb-4 px-4 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-very-dark-grey focus:outline-none">
+              <Menu.Items className="absolute right-0 mt-4 pb-4 px-4 w-48 origin-top-right divide-y divide-gray-100 rounded-lg shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] bg-white dark:bg-very-dark-grey focus:outline-none">
                 <div>
                   <Menu.Item>
                     <Form action={`user/boards/${openedBoard?.id}/edit`}>
@@ -131,15 +178,7 @@ const Header = ({
                         text-medium-grey group flex w-full items-center rounded-md py-2 text-sm`}
                         type="submit"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          className="w-5 h-5 mx-2"
-                        >
-                          <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
-                          <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
-                        </svg>
+                        <IconEdit className="w-5 h-5 mx-2" />
                         Edit Board
                       </button>
                     </Form>
@@ -151,20 +190,7 @@ const Header = ({
                         text-medium-grey group flex w-full items-center rounded-md py-2 text-sm`}
                         onClick={openShareModal}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-5 h-5 mx-2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
-                          />
-                        </svg>
+                        <IconShareBoard className="w-5 h-5 mx-2" />
                         Share Board
                       </button>
                     </Menu.Item>
@@ -174,18 +200,7 @@ const Header = ({
                       className={`text-destructive-red hover:bg-destructive-red/20 group flex w-full items-center rounded-md py-2 text-sm`}
                       onClick={openDeleteModal}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="w-5 h-5 mx-2"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <IconTrashcan className="w-5 h-5 mx-2" />
                       Delete Board
                     </button>
                   </Menu.Item>
@@ -199,7 +214,7 @@ const Header = ({
         isOpen={isDeleteOpen}
         closeModal={closeDeleteModal}
         boardName={openedBoard?.name}
-        openedBoard={undefined}
+        openedBoard={openedBoard}
         handleDeleteBoard={handleDeleteBoard}
       />
       <ShareBoardModal

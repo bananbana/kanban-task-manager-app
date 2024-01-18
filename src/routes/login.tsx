@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import AuthService from "../services/auth.service";
 import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 const Login = () => {
   const [redirect, setRedirect] = useState<string | null>(null);
@@ -56,11 +57,11 @@ const Login = () => {
     <div id="login-container" className="w-full flex justify-center py-4">
       <div
         id="card-container"
-        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col justify-center py-6 px-4 items-center h-modal overflow-auto max-w-[480px]"
+        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col justify-center py-6 px-4 items-center h-modal overflow-auto w-[480px] shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
       >
         <div
           id="login-info"
-          className="flex flex-col justify-around max-w-[300px] pb-3 pt-4"
+          className="flex flex-col justify-around w-full pb-3 pt-4"
         >
           <p className="text-heading-l dark:text-white break-words mx-4">
             Login to your account to use the app.
@@ -71,16 +72,19 @@ const Login = () => {
           validationSchema={validationSchema}
           onSubmit={handleLogin}
         >
-          <Form id="form" className="flex flex-col pt-1 w-fit justify-around">
+          <Form
+            id="form"
+            className="flex flex-col pt-1 w-full px-4 justify-around"
+          >
             <div
               id="form-username"
-              className="text-body-xl text-medium-grey pb-2 dark:text-white"
+              className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
             >
               <label htmlFor="username">Username</label>
               <Field
                 name="username"
                 type="text"
-                className="w-full dark:bg-dark-grey dark:border-medium-grey"
+                className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
               />
               <ErrorMessage
                 name="username"
@@ -91,13 +95,13 @@ const Login = () => {
 
             <div
               id="form-password"
-              className="text-body-xl text-medium-grey pb-2 dark:text-white"
+              className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
             >
               <label htmlFor="password">Password</label>
               <Field
                 name="password"
                 type="password"
-                className="w-full dark:bg-dark-grey dark:border-medium-grey"
+                className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
               />
               <ErrorMessage
                 name="password"
@@ -106,16 +110,17 @@ const Login = () => {
               />
             </div>
 
-            <div id="auth-btn" className="flex w-full justify-center py-2">
+            <div
+              id="auth-btn"
+              className="flex w-full justify-center py-2 flex-col items-center"
+            >
               <button
                 type="submit"
-                className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-3 font-medium rounded-full flex items-center disabled:bg-main-purple-hover h-10"
+                className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-1/5"
                 disabled={loading}
               >
-                {loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Login</span>
+                {" "}
+                {loading ? <BeatLoader color="#635FC7" /> : <span>Login</span>}
               </button>
             </div>
             <div
@@ -126,13 +131,16 @@ const Login = () => {
                 Don't have an account? Sign up to get started.
               </p>
               <button
-                className="dark:text-[#FFFFFF] dark:hover:text-main-purple-hover text-main-purple hover:text-main-purple-hover px-3 font-medium disabled:bg-main-purple-hover h-10 w-fit"
+                className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-1/5 mt-4"
                 disabled={loading}
               >
-                {loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
+                {loading ? (
+                  <BeatLoader color="#635FC7" />
+                ) : (
+                  <NavLink className="ring-0 outline-0" to={"/register"}>
+                    Signup
+                  </NavLink>
                 )}
-                <NavLink to={"/register"}>Signup</NavLink>
               </button>
             </div>
 

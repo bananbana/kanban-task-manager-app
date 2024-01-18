@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 
-const useCloseModal = (
+const useCloseMenu = (
   ref: React.RefObject<HTMLElement>,
   onClose: () => void
 ) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
+        console.log(ref.current);
         onClose();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
@@ -19,4 +19,4 @@ const useCloseModal = (
   }, [ref, onClose]);
 };
 
-export default useCloseModal;
+export default useCloseMenu;

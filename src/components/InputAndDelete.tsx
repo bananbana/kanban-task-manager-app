@@ -1,3 +1,5 @@
+import { IconCross } from "../assets/images/IconCross";
+
 interface InputAndDeleteProps {
   id: number;
   value: string;
@@ -31,15 +33,7 @@ const InputAndDelete = ({
         className="group flex justify-center items-center px-2 h-10 hover:cursor-pointer"
         onClick={() => handleRemove(id)}
       >
-        <svg className="w-[14px] h-[15px]" xmlns="http://www.w3.org/2000/svg">
-          <g
-            className="fill-[#828FA3] group-hover:fill-[#EA5555]"
-            fillRule="evenodd"
-          >
-            <path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z" />
-            <path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z" />
-          </g>
-        </svg>
+        <IconCross className="fill-[#828FA3] group-hover:fill-[#EA5555]" />
       </button>
     </div>
   );

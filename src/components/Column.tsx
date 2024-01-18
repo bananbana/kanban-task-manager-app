@@ -64,7 +64,10 @@ const Column = ({
   }, [colorChanged, onEditColor, statusColor]);
 
   return (
-    <div className="h-full ml-6 w-72 flex flex-col pt-5" ref={setNodeRef}>
+    <div
+      className="h-full ml-6 w-72 flex flex-col tablet:pt-5"
+      ref={setNodeRef}
+    >
       <div className="flex items-center flex-row py-3">
         <div
           className={`h-4 w-4 rounded-full flex justify-center items-center cursor-pointer`}
@@ -100,7 +103,6 @@ const Column = ({
             ))}
           </ul>
         </SortableContext>
-        {/* {children !== undefined ? children : ""} */}
       </div>
     </div>
   );

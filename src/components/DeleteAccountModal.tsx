@@ -1,11 +1,22 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
+import { Form } from "react-router-dom";
 
 interface Props {
   closeModal: () => void;
   isOpen: boolean;
+  password: string;
+  handlePasswordValidation: (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+  handleDeleteAccount: (e: React.FormEvent) => void;
 }
-const DeleteAccountModal = ({ closeModal, isOpen }: Props) => {
+const DeleteAccountModal = ({
+  closeModal,
+  isOpen,
+  handleDeleteAccount,
+  password,
+  handlePasswordValidation,
+}: Props) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -47,22 +58,40 @@ const DeleteAccountModal = ({ closeModal, isOpen }: Props) => {
                     </p>
                   </div>
 
-                  <div className="mt-4 flex justify-between">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-destructive-red hover:bg-red-hover px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-destructive-red/50 focus-visible:ring-offset-1"
-                      onClick={closeModal}
-                    >
-                      Got it, thanks!
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-main-purple px-4 py-2 text-sm font-medium text-white hover:bg-main-purple-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-main-purple/50 focus-visible:ring-offset-1"
-                      onClick={closeModal}
-                    >
-                      Changed my mind.
-                    </button>
-                  </div>
+                  <Form
+                    method="delete"
+                    id="delete-account-form"
+                    onSubmit={handleDeleteAccount}
+                  >
+                    <div className="mt-4 flex justify-between flex-col">
+                      <label className="pb-2 py-2 text-body-m text-medium-grey">
+                        Password:
+                      </label>
+                      <input
+                        type="password"
+                        onChange={handlePasswordValidation}
+                        value={password}
+                        required
+                        autoFocus
+                        className="form-input"
+                      />
+                      <p className="text-medium-grey text-body-m font-thin mt-2">
+                        Please provide your password to validate this operation.
+                      </p>
+                      <div id="delete-acc-btns" className="flex gap-4 mt-10">
+                        <button type="submit" className="btn-destructive w-1/2">
+                          Got it, thanks!
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary w-1/2"
+                          onClick={closeModal}
+                        >
+                          Changed my mind.
+                        </button>
+                      </div>
+                    </div>
+                  </Form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

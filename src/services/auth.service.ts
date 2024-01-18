@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import IUser from "../types/user.type";
+import eventBus from "../common/EventBus";
 
 const API_URL = "http://localhost:8080/api/auth/";
 
@@ -13,6 +14,7 @@ class AuthService {
       .then((response: AxiosResponse<{ accessToken: string }>) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          eventBus.dispatch("login");
         }
 
         return response.data;

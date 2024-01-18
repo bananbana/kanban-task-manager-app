@@ -1,6 +1,10 @@
 import { Transition, Dialog } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Form } from "react-router-dom";
+import { IconCloseModal } from "../assets/images/IconCloseModal";
+import { IconEmail } from "../assets/images/IconEmail";
+import { IconChevronRight } from "../assets/images/IconChevronRight";
+import { IconUsername } from "../assets/images/IconUsername";
 
 interface Props {
   isOpen: boolean;
@@ -43,6 +47,12 @@ const SettingsModal = ({
     setIsEditMode(false);
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      setIsEditMode(false);
+    }
+  }, [isOpen]);
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -70,35 +80,20 @@ const SettingsModal = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-grey p-6 text-left align-middle shadow-xl transition-all h-[450px]">
-                  <div className="flex justify-end">
+                <Dialog.Panel className="acc-modal">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-heading-xl dark:text-white font-medium px-2 mt-2 mb-4 flex justify-between"
+                  >
+                    {emailModal && "Email"}
+                    {usernameModal && "Username"}
                     <button
                       type="button"
                       className="h-8 w-8 flex justify-center items-center rounded-full dark:text-white hover:text-destructive-red outline-0 ring-0 focus:ring-1 focus:ring-destructive-red"
                       onClick={closeModal}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
+                      <IconCloseModal />
                     </button>
-                  </div>
-                  <Dialog.Title
-                    as="h3"
-                    className="text-heading-xl dark:text-white font-medium px-2 mt-2 mb-4"
-                  >
-                    {emailModal && "Email"}
-                    {usernameModal && "Username"}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 px-2">
@@ -123,7 +118,7 @@ const SettingsModal = ({
                             onChange={handleEmailChange}
                             required
                             autoFocus
-                            className="focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md"
+                            className="form-input"
                           ></input>
                         </div>
                       )}
@@ -138,7 +133,7 @@ const SettingsModal = ({
                             onChange={handleUsernameChange}
                             required
                             autoFocus
-                            className="focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md"
+                            className="form-input"
                           ></input>
                         </div>
                       )}
@@ -150,8 +145,8 @@ const SettingsModal = ({
                         value={password}
                         onChange={handlePasswordValidation}
                         required
-                        className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md`}
-                      ></input>
+                        className={`form-input`}
+                      />
                       <p className="text-medium-grey text-body-m font-thin mt-4">
                         This action will require you to log into your account
                         again.
@@ -181,37 +176,10 @@ const SettingsModal = ({
                       onClick={openEditMode}
                       title="Change email"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                        />
-                      </svg>
+                      <IconEmail />
                       <p className="ml-2">{email}</p>
 
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 ml-auto"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
+                      <IconChevronRight className="w-6 h-6 ml-auto" />
                     </button>
                   )}
                   {usernameModal && !isEditMode && (
@@ -220,36 +188,10 @@ const SettingsModal = ({
                       onClick={openEditMode}
                       title="Change username"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"
-                        />
-                      </svg>
+                      <IconUsername />
 
                       <p className="ml-2">{username}</p>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 ml-auto"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
+                      <IconChevronRight className="w-6 h-6 ml-auto" />
                     </button>
                   )}
                 </Dialog.Panel>

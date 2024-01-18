@@ -8,6 +8,8 @@ import { BoardDetails } from "../types/BoardTypes";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { StatusCodes } from "../types/StatusTypes";
+import { IconChevronUp } from "../assets/images/IconChevronUp";
+import { IconChevronDown } from "../assets/images/IconChevronDown";
 
 const NewTask = () => {
   const { boardId } = useParams();
@@ -92,17 +94,18 @@ const NewTask = () => {
     }
   };
   return (
-    <div className="h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-10 flex justify-center items-center">
-      <div
-        ref={modalRef}
-        id="new-task-modal"
-        className={`px-8 absolute h-fit overflow-auto rounded-lg w-[480px] dark:bg-dark-grey dark:text-white bg-white text-b`}
-      >
-        <p className="text-heading-l pt-8">Add New Task</p>
-        <Form method="put" id="new-task-form" onSubmit={handleSubmit}>
-          <div className="flex flex-col pt-6">
-            <div className="pb-6">
-              <label className="text-body-m text-medium-grey pb-2 dark:text-white">
+    <div className="backdrop-overlay">
+      <div ref={modalRef} id="new-task-modal" className={`edit-modal`}>
+        <p className="text-heading-l my-8 px-6">Add New Task</p>
+        <Form
+          method="put"
+          id="new-task-form"
+          className="form"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-col w-full gap-3">
+            <div>
+              <label className="text-body-m text-medium-grey mb-2 dark:text-white">
                 Title
               </label>
               <input
@@ -112,22 +115,22 @@ const NewTask = () => {
                 required
                 autoFocus
                 onChange={handleTitleChange}
-                className={`border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple`}
+                className={`form-input`}
               ></input>
             </div>
-            <div className="pb-6">
-              <label className="text-body-m text-medium-grey pb-2 dark:text-white">
+            <div>
+              <label className="text-body-m text-medium-grey mb-2 dark:text-white">
                 Description
               </label>
               <textarea
                 value={description}
                 onChange={handleDescriptionChange}
                 placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
-                className={`border rounded-md w-full h-[112px] px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light break-all hover:border-main-purple dark:hover:border-main-purple`}
+                className={`h-[112px] form-input`}
                 style={{ resize: "none" }}
               ></textarea>
             </div>
-            <div className="">
+            <div>
               <label className="text-body-m text-medium-grey pb-2 dark:text-white">
                 Subtasks
               </label>
@@ -141,20 +144,20 @@ const NewTask = () => {
                   handleRemove={handleRemoveSubtask}
                 />
               ))}
-              <button
-                className={`w-full h-[40px] border border-none text-main-purple font-bold rounded-full text-body-l dark:bg-white bg-light-grey hover:bg-main-purple-hover hover:bg-opacity-25`}
-                type="button"
-                onClick={addSubtask}
-              >
-                + Add New Subtask
-              </button>
             </div>
+            <button
+              className={`w-full h-[40px] btn-secondary`}
+              type="button"
+              onClick={addSubtask}
+            >
+              + Add New Subtask
+            </button>
             <Listbox value={selectedStatus} onChange={setSelectedStatus}>
               <div className="relative mt-6">
-                <Listbox.Label className="text-body-m text-medium-grey pb-2 dark:text-white">
+                <Listbox.Label className="text-body-m text-medium-grey mb-2 dark:text-white">
                   Status
                 </Listbox.Label>
-                <Listbox.Button className="relative w-full cursor-default p-4 rounded-md text-body-l h-[40px] border border-lines-light dark:border-lines-dark text-left focus:outline-none focus-visible:border-main-purple dark:focus:border-main-purple flex items-center justify-start hover:border-main-purple dark:hover:border-main-purple">
+                <Listbox.Button className="relative listbox-button">
                   {({ open }) => (
                     <>
                       <span className="block truncate w-full text-black dark:text-white">
@@ -162,18 +165,7 @@ const NewTask = () => {
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"></span>
                       <div className="">
-                        <svg
-                          width="10"
-                          height="7"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke="#635FC7"
-                            strokeWidth="2"
-                            fill="none"
-                            d={open ? "M9 6 5 2 1 6" : "m1 1 4 4 4-4"}
-                          />
-                        </svg>
+                        {open ? <IconChevronUp /> : <IconChevronDown />}
                       </div>
                     </>
                   )}
@@ -184,7 +176,7 @@ const NewTask = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="listbox-options">
                     {statusCodes?.map((status) => (
                       <Listbox.Option
                         key={status.id}
@@ -223,10 +215,7 @@ const NewTask = () => {
               </div>
             </Listbox>
             <div className="w-full mb-8 mt-6">
-              <button
-                className="w-full h-[40px] border border-none bg-main-purple hover:bg-main-purple-hover text-white font-bold rounded-full text-body-l"
-                type="submit"
-              >
+              <button className="w-full h-[40px] btn-primary-s" type="submit">
                 Create Task
               </button>
             </div>

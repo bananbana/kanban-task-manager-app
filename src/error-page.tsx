@@ -1,16 +1,15 @@
-import { useRouteError } from "react-router-dom";
+import { authHeader } from "./services/auth-header";
 
 export const ErrorPage = () => {
-  const error = useRouteError() as Error;
-  console.error(error);
-
-  return (
+  return authHeader().username === "Guest" ? (
     <div id="error-page">
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
-        <i>{error.message}</i>
+        <i>{authHeader().Authorization}</i>
       </p>
     </div>
+  ) : (
+    ""
   );
 };

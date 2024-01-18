@@ -4,9 +4,11 @@ import { StatusCodes } from "../../types/StatusTypes";
 import { BoardData } from "../../types/BoardTypes";
 import { authHeader } from "../../services/auth-header";
 import { UserType } from "../../types/UserType";
+import { useNavigate } from "react-router-dom";
 
 const useBoardMutation = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const editBoardNameMutation = useMutation({
     mutationFn: async (data: { boardId: string; name: string }) => {
       const res = await axios.put<BoardData>(
@@ -68,17 +70,28 @@ const useBoardMutation = () => {
   };
 
   const createBoardMutation = useMutation({
-    mutationFn: async (data: { name: string; statusCodes: string[] }) => {
+    mutationFn: async (data: {
+      name: string;
+      statusCodes: string[];
+      userIds: number[];
+      ownerId: number;
+    }) => {
       return await axios
         .post<BoardData>(
           "http://localhost:8080/user/boards/create",
           {
             name: data.name,
             statusCodes: data.statusCodes,
+            userIds: data.userIds,
+            ownerId: data.ownerId,
           },
           { headers: authHeader() }
         )
         .then((response) => response.data);
+    },
+    onSuccess: (data) => {
+      const newBoardId = data.id;
+      navigate(`/user/boards/${newBoardId}`);
     },
     onSettled() {
       void queryClient.invalidateQueries(["boards"]);
@@ -91,6 +104,8 @@ const useBoardMutation = () => {
   const createBoardHandler = (data: {
     name: string;
     statusCodes: string[];
+    userIds: number[];
+    ownerId: number;
   }) => {
     void createBoardMutation.mutateAsync(data);
   };
