@@ -20,8 +20,6 @@ const allBoardsQuery = () => ({
 });
 const BoardAdmin = () => {
   const queryClient = useQueryClient();
-  // const [content, setContent] = useState<string>("");
-
   const { data: boards } = useQuery(allBoardsQuery());
   const usersData = queryClient.getQueryData<UserType[]>(["users"]);
   const users = usersData ?? [];
@@ -94,30 +92,6 @@ const BoardAdmin = () => {
     boardId && updateUserAccess({ users, boardId });
     closeShareModal();
   };
-  // useEffect(() => {
-  //   const users = queryClient.getQueryData<UserType[]>(["users"]);
-  //   if (users && boards) {
-  //     setAllUsers(users);
-  //   }
-  // }, [boards, queryClient, users]);
-
-  // useEffect(() => {
-  //   UserService.getAdminBoard()
-  //     .then((response) => {
-  //       setContent(response.data as string);
-  //     })
-  //     .catch((error: AxiosError) => {
-  //       setContent(
-  //         ((error.response && error.response.data) as string) ||
-  //           error.message ||
-  //           "Error occurred"
-  //       );
-
-  //       if (error.response && error.response.status === 401) {
-  //         EventBus.dispatch("logout");
-  //       }
-  //     });
-  // }, []);
 
   return (
     <div

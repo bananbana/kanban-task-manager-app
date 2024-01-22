@@ -181,15 +181,15 @@ const ShareBoardAdminModal = ({
                 </Listbox>
                 <div className="mt-6 mb-4 justify-between flex">
                   <button
-                    className="h-10 bg-main-purple w-[120px] rounded-full text-white hover:bg-main-purple-hover"
+                    className="btn-primary-s w-1/3"
                     onClick={() =>
                       shareBoard(usersWithAccess, selectedBoard?.id)
                     }
                   >
-                    Share
+                    Save
                   </button>
                   <button
-                    className="h-10 bg-light-grey w-[120px] rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
+                    className="btn-secondary w-1/3"
                     onClick={handleCloseModal}
                   >
                     Cancel

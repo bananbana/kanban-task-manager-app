@@ -31,31 +31,32 @@ const PrivacyOwnedBoardsModal = ({
         <ul className="overflow-y-auto max-h-[250px] w-2/3 py-2 pr-2">
           <div>
             <p className="text-heading-s font-normal w-full px-2 mb-2">
-              Your boards
+              Your boards:
             </p>
           </div>
-          {ownedBoards
-            ?.filter((boards) => boards.userIds.length > 1)
-            .map((board) => (
-              <li key={board.id}>
-                <button
-                  className={`flex items-center py-2 px-3 rounded-r-full hover:text-white group w-full outline-0 ring-0 focus:ring-2 focus:ring-main-purple ${
-                    selectedBoard === board
-                      ? "bg-main-purple text-white"
-                      : "hover:bg-main-purple-hover"
-                  }`}
-                  onClick={() => selectBoard(board)}
-                >
-                  <IconBoard
-                    className={`mr-2 w-4 h-4 dark:group-hover:fill-purple fill-grey group-hover:fill-white ${
-                      selectedBoard === board ? "fill-white" : ""
+          {ownedBoards &&
+            ownedBoards
+              .filter((boards) => boards.userIds.length > 1)
+              .map((board) => (
+                <li key={board.id}>
+                  <button
+                    className={`flex items-center py-2 px-3 rounded-r-full hover:text-white group w-full outline-0 ring-0 focus:ring-2 focus:ring-main-purple ${
+                      selectedBoard === board
+                        ? "bg-main-purple text-white"
+                        : "hover:bg-main-purple-hover"
                     }`}
-                  />
-                  <p>{board.name}</p>
-                  <IconChevronRight className="w-4 h-4 ml-auto" />
-                </button>
-              </li>
-            ))}
+                    onClick={() => selectBoard(board)}
+                  >
+                    <IconBoard
+                      className={`mr-2 w-4 h-4 dark:group-hover:fill-purple fill-grey group-hover:fill-white ${
+                        selectedBoard === board ? "fill-white" : ""
+                      }`}
+                    />
+                    <p>{board.name}</p>
+                    <IconChevronRight className="w-4 h-4 ml-auto" />
+                  </button>
+                </li>
+              ))}
         </ul>
         {selectedBoard && (
           <ul

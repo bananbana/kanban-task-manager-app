@@ -43,14 +43,14 @@ const AdminTabsBoards = ({
                     </h3>
 
                     <ul className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-medium-grey justify-start">
-                      <li className="flex w-1/4 items-center">
+                      <li className="flex w-2/5 items-center">
                         Owner:{" "}
                         {
                           users?.find((user) => user.id === board.ownerId)
                             ?.username
                         }
                       </li>
-                      <li className="w-1/5 flex items-center mb-2">
+                      <li className="w-1/5 flex items-center">
                         Tasks: {board.tasks.length}
                       </li>
                       <li className="flex w-3/5 flex-wrap items-center">

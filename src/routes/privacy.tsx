@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PrivacyModal from "../components/PrivacyModal";
 import { useQueryClient } from "@tanstack/react-query";
 import { BoardData } from "../types/BoardTypes";
@@ -14,8 +14,6 @@ const Privacy = () => {
     useUserMutation();
   const [parent] = useAutoAnimate();
   const [list] = useAutoAnimate();
-  const boards = queryClient.getQueryData<BoardData[]>(["boards"]);
-  const users = queryClient.getQueryData<UserType[]>(["users"]);
   const [isOpen, setIsOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [yourBoardsModalOpen, setYourBoardsModalOpen] = useState(false);
@@ -23,10 +21,21 @@ const Privacy = () => {
   const currentUser = currentUserSignal.value;
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
+  const [ownedBoards, setOwnedBoards] = useState<BoardData[]>([]);
+  const [sharedBoards, setSharedBoards] = useState<BoardData[]>([]);
+  const users = queryClient.getQueryData<UserType[]>(["users"]);
+  const boards = queryClient.getQueryData<BoardData[]>(["boards"]);
 
-  const ownedBoards = boards?.filter(
-    (board) => board.ownerId === currentUser?.id
-  );
+  useEffect(() => {
+    if (currentUser !== null && boards !== undefined) {
+      setOwnedBoards(
+        boards.filter((board) => board.ownerId === currentUser.id)
+      );
+      setSharedBoards(
+        boards.filter((board) => board.ownerId !== currentUser.id)
+      );
+    }
+  }, [currentUser, boards]);
 
   const openModal = (modalType: string) => {
     if (modalType === "password") {
@@ -115,10 +124,8 @@ const Privacy = () => {
             <p>Boards shared to you</p>
             <p className="text-body-m group-hover:text-white text-medium-grey font-normal pt-2">
               {"Boards: "}
-              {boards?.filter((board) => board.ownerId !== currentUser?.id)
-                .length
-                ? boards?.filter((board) => board.ownerId !== currentUser?.id)
-                    .length
+              {sharedBoards.length
+                ? sharedBoards.length
                 : "You don't have shared access to any board"}
             </p>
           </span>
