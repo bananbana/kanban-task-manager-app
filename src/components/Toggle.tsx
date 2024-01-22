@@ -9,7 +9,7 @@ interface ToggleProps {
 const Toggle = ({ value, toggleValue }: ToggleProps) => {
   return (
     <div
-      className={`w-[251px] h-[48px] rounded-md flex flex-row justify-center items-center dark:bg-very-dark-grey bg-light-grey`}
+      className={`w-[250px] h-[48px] rounded-md flex flex-row justify-center items-center dark:bg-very-dark-grey bg-light-grey mx-6`}
     >
       <span className="mr-[23px]">
         <IconLightTheme />

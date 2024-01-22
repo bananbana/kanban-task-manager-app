@@ -8,7 +8,6 @@ import autoAnimate from "@formkit/auto-animate";
 import IUser from "../types/user.type";
 import EventBus from "../common/EventBus";
 import AuthService from "../services/auth.service";
-import { authHeader } from "../services/auth-header";
 import { UserType } from "../types/UserType";
 import { currentUserSignal } from "../userSignal";
 import authService from "../services/auth.service";
@@ -27,16 +26,18 @@ const Root = () => {
   const users = queryClient.getQueryData<UserType[]>(["users"]);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+  const [currentUser, setCurrentUser] = useState<IUser | null>(
+    currentUserSignal.value
+  );
   const [currentUserName, setCurrentUserName] = useState<string | undefined>(
-    authHeader().username
+    currentUserSignal.value?.username
   );
   const navigate = useNavigate();
   const parent = useRef(null);
 
   const logOut = () => {
     AuthService.logout();
-    setCurrentUser(undefined);
+    setCurrentUser(null);
     setCurrentUserName(undefined);
     console.log("logout");
   };

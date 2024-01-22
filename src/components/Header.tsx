@@ -24,7 +24,7 @@ interface HeaderProps {
   sidebarHidden: boolean;
   openedBoard: BoardData | undefined;
   currentUserName: string | undefined;
-  currentUser: IUser | undefined;
+  currentUser: IUser | null;
   users: UserType[] | undefined;
   toggleSidebar: () => void;
 }

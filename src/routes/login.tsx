@@ -116,7 +116,7 @@ const Login = () => {
             >
               <button
                 type="submit"
-                className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-1/5"
+                className="btn-primary-s"
                 disabled={loading}
               >
                 {" "}
@@ -130,10 +130,7 @@ const Login = () => {
               <p className="text-heading-m font-thin text-medium-grey break-words w-44 text-center">
                 Don't have an account? Sign up to get started.
               </p>
-              <button
-                className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-1/5 mt-4"
-                disabled={loading}
-              >
+              <button className="btn-primary-s mt-4" disabled={loading}>
                 {loading ? (
                   <BeatLoader color="#635FC7" />
                 ) : (

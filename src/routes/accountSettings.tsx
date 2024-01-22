@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import DeleteAccountModal from "../components/DeleteAccountModal";
 import { IconChevronRight } from "../assets/images/IconChevronRight";
+import EventBus from "../common/EventBus";
+import { currentUserSignal } from "../userSignal";
 
 const userQuery = () => ({
   queryKey: ["user_details"],
@@ -25,6 +27,12 @@ const AccountSettings = () => {
   const [newUsername, setNewUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const logOut = () => {
+    AuthService.logout();
+    currentUserSignal.value = null;
+    console.log("logout");
+  };
 
   const openConfirmModal = () => {
     setIsConfirmOpen(true);
@@ -68,13 +76,19 @@ const AccountSettings = () => {
     const username = data?.username;
     const userId = data?.id;
 
+    const handleLogout = () => {
+      logOut();
+    };
+
     if (userId && username && email) {
       deleteAccount({ userId, username, email, password });
       closeModal();
       setPassword("");
-      AuthService.logout();
-
+      EventBus.on("logout", handleLogout);
       navigate("/login");
+      return () => {
+        EventBus.remove("logout", handleLogout);
+      };
     }
   };
 

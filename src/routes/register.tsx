@@ -4,7 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 
 import AuthService from "../services/auth.service";
 import { AxiosError, AxiosResponse } from "axios";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
 const Register = () => {
@@ -75,10 +75,7 @@ const Register = () => {
         id="card-container"
         className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col py-6 px-4 h-modal overflow-auto w-[480px] shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
       >
-        <div
-          id="register-info"
-          className="flex flex-col max-w-[300px] pb-3 pt-4"
-        >
+        <div id="register-info" className="flex flex-col w-full pb-3 pt-4">
           <p className="text-heading-l dark:text-white break-words mx-4">
             Register as a new user.
           </p>
@@ -152,7 +149,7 @@ const Register = () => {
                 >
                   <button
                     type="submit"
-                    className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-fit"
+                    className="btn-primary-s"
                     disabled={loading}
                   >
                     {loading ? (
@@ -169,10 +166,7 @@ const Register = () => {
                   <p className="text-heading-m font-thin text-medium-grey break-words w-48 text-center">
                     Already have an account? Sign in and get started.
                   </p>
-                  <button
-                    className="bg-main-purple hover:bg-main-purple-hover text-[#FFFFFF] px-4 font-medium rounded-full flex  items-center justify-center disabled:bg-white h-10 w-1/5 mt-4"
-                    disabled={loading}
-                  >
+                  <button className="btn-primary-s mt-4" disabled={loading}>
                     {loading ? (
                       <BeatLoader color="#635FC7" />
                     ) : (
@@ -182,9 +176,8 @@ const Register = () => {
                 </div>
               </div>
             )}
-
             {message && (
-              <div id="message" className="form-group">
+              <div id="message" className="py-4">
                 <div
                   className={
                     successful
@@ -194,6 +187,15 @@ const Register = () => {
                   role="alert"
                 >
                   {message}
+                  {successful && <p>Now you can login to your account.</p>}
+                </div>
+                <div
+                  id="login-btn-container"
+                  className="flex items-center mt-2"
+                >
+                  <Link to="/login">
+                    <button className="btn-primary-s">Login</button>
+                  </Link>
                 </div>
               </div>
             )}
