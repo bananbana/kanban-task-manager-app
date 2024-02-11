@@ -11,7 +11,7 @@ const useUpdateSubtask = () => {
   const toggleSubtask = useMutation(
     async (variables: SubtaskData) => {
       const { id, title, isCompleted, taskId } = variables;
-      console.log("Toggle subtask mutation called with:", variables);
+      console.log("Toggle subtask mutation called with: ", variables);
 
       const response = await axios.put<SubtaskData>(
         `http://localhost:8080/tasks/${taskId}/subtasks/${id}`,
@@ -54,7 +54,9 @@ const useUpdateSubtask = () => {
           );
         } else {
           console.error(
-            "Error occurred, but no previous subtask data available."
+            "Error occurred, but no previous subtask data available.",
+            error,
+            variables
           );
         }
       },
