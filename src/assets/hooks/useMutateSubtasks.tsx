@@ -46,7 +46,9 @@ const useSubtaskMutation = (taskId: number) => {
         );
       } else {
         console.error(
-          "Error occurred, but no previous subtask data available."
+          "Error occurred, but no previous subtask data available.",
+          error,
+          variables
         );
       }
     },
