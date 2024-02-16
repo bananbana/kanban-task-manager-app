@@ -16,7 +16,7 @@ class AuthService {
           localStorage.setItem("user", JSON.stringify(response.data));
           eventBus.dispatch("login");
         }
-
+        console.log(API_URL);
         return response.data;
       });
   }
