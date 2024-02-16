@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import IUser from "../types/user.type";
 import eventBus from "../common/EventBus";
 
-const API_URL = `http://${process.env.API_URL}/api/auth/`;
+const API_URL = `http://srv24.mikr.us:20344/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
