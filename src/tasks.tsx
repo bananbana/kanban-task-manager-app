@@ -11,12 +11,12 @@ export const getTask = async (
     let url;
     if (boardId && taskId) {
       url = `https://${
-        import.meta.env.REACT_APP_HOST_URL
+        import.meta.env.VITE_HOST_URL
       }/user/boards/${boardId}/tasks/${taskId}`;
       const task = await axios.get<TaskData>(url, { headers: authHeader() });
       const subtasks = await axios.get<SubtaskData[]>(
         `https://${
-          import.meta.env.REACT_APP_HOST_URL
+          import.meta.env.VITE_HOST_URL
         }/user/tasks/${taskId}/subtasks`,
         { headers: authHeader() }
       );
@@ -35,7 +35,7 @@ export const getTask = async (
 export const getAllTasksForAdm = async () => {
   try {
     const tasks = await axios.get<TaskData[]>(
-      `https://${import.meta.env.REACT_APP_HOST_URL}/boards/tasks`,
+      `https://${import.meta.env.VITE_HOST_URL}/boards/tasks`,
       { headers: authHeader() }
     );
     return tasks.data;

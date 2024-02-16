@@ -5,7 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   define: {
-    "process.env": process.env,
-    ENV_KEY: process.env.ENV_KEY,
+    __APP_ENV__: process.env.VITE_HOST_URL,
   },
 });

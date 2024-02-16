@@ -15,7 +15,7 @@ const useUpdateSubtask = () => {
 
       const response = await axios.put<SubtaskData>(
         `https://${
-          import.meta.env.REACT_APP_HOST_URL
+          import.meta.env.VITE_HOST_URL
         }/tasks/${taskId}/subtasks/${id}`,
         {
           id,
