@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authHeader } from "./auth-header";
 
-const HOST_URL = `http://${process.env.HOST_URL}/api/test/`;
+const HOST_URL = `https://${process.env.HOST_URL}/api/test/`;
 
 class UserService {
   getPublicContent() {
