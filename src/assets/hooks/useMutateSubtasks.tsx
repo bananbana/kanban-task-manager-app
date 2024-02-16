@@ -8,7 +8,7 @@ const useSubtaskMutation = (taskId: number) => {
   const toggleSubtask = useMutation({
     mutationFn: async (data: SubtaskData) => {
       const response = await axios.put<SubtaskData>(
-        `http://localhost:8080/tasks/${data.taskId}/subtasks/${data.id}`,
+        `http://${process.env.API_URL}/tasks/${data.taskId}/subtasks/${data.id}`,
         {
           id: data.id,
           title: data.title,

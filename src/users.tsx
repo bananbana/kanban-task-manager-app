@@ -5,7 +5,7 @@ import { authHeader } from "./services/auth-header";
 export const getUsers = async () => {
   try {
     const users = await axios.get<UserType[]>(
-      `http://localhost:8080/user/all`,
+      `http://${process.env.API_URL}/user/all`,
       { headers: authHeader() }
     );
     return users.data ?? [];
@@ -18,7 +18,7 @@ export const getUsers = async () => {
 export const getUserDetails = async () => {
   try {
     const userDet = await axios.get<UserType>(
-      "http://localhost:8080/user/user_details",
+      `http://${process.env.API_URL}/user/user_details`,
       { headers: authHeader() }
     );
     return userDet.data ?? [];

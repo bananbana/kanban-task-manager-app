@@ -7,7 +7,7 @@ const useSubtasks = (taskId: number) => {
     queryKey: ["tasks", taskId],
     queryFn: async () => {
       const { data } = await axios.get<SubtaskData[]>(
-        `http://localhost:8080/tasks/${taskId}/subtasks`
+        `http://${process.env.API_URL}/tasks/${taskId}/subtasks`
       );
       return data;
     },

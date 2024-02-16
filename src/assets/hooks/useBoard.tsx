@@ -11,7 +11,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["boards", boardId],
     queryFn: async () => {
       const { data } = await axios.get<BoardData>(
-        `http://localhost:8080/boards/${boardId}`
+        `http://${process.env.API_URL}/boards/${boardId}`
       );
       return { boardDetail: data };
     },
@@ -20,7 +20,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["statusCodes", boardId],
     queryFn: async () => {
       const { data } = await axios.get<StatusCodes[]>(
-        `http://localhost:8080/boards/${boardId}/status_codes`
+        `http://${process.env.API_URL}/boards/${boardId}/status_codes`
       );
       return { statusCodes: data };
     },
@@ -30,7 +30,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["tasks", boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData[]>(
-        `http://localhost:8080/boards/${boardId}/tasks`
+        `http://${process.env.API_URL}/boards/${boardId}/tasks`
       );
       return { boardsTasks: data };
     },
