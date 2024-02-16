@@ -10,7 +10,7 @@ const useAdminMutation = () => {
   const deleteBoardAdminMutation = useMutation({
     mutationFn: (boardId: number) => {
       return axios.delete<BoardData>(
-        `http://${process.env.API_URL}/boards/${boardId}`,
+        `http://${process.env.HOST_URL}/boards/${boardId}`,
         {
           headers: authHeader(),
         }
@@ -28,7 +28,7 @@ const useAdminMutation = () => {
   const deleteUserAdminMutation = useMutation({
     mutationFn: (userId: number) => {
       return axios.delete<UserType>(
-        `http://${process.env.API_URL}/user/${userId}`,
+        `http://${process.env.HOST_URL}/user/${userId}`,
         {
           headers: authHeader(),
         }
@@ -46,7 +46,7 @@ const useAdminMutation = () => {
   const assignAdminMutation = useMutation({
     mutationFn: (userId: number) => {
       return axios.put(
-        `http://${process.env.API_URL}/user/${userId}`,
+        `http://${process.env.HOST_URL}/user/${userId}`,
         { roleId: 2 },
         {
           headers: authHeader(),
@@ -65,7 +65,7 @@ const useAdminMutation = () => {
   const updateUserAccessMutation = useMutation({
     mutationFn: (data: { users: UserType[]; boardId: number }) => {
       return axios.put(
-        `http://${process.env.API_URL}/boards/${data.boardId}/update_access`,
+        `http://${process.env.HOST_URL}/boards/${data.boardId}/update_access`,
         data.users.map((user) => user.id),
         { headers: authHeader() }
       );

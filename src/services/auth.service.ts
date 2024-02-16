@@ -2,12 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import IUser from "../types/user.type";
 import eventBus from "../common/EventBus";
 
-const API_URL = `http://srv24.mikr.us:20344/api/auth/`;
+const HOST_URL = `http://${process.env.HOST_URL}/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
     return axios
-      .post(API_URL + "signin", {
+      .post(HOST_URL + "signin", {
         username,
         password,
       })
@@ -26,7 +26,7 @@ class AuthService {
   }
 
   register(username: string, email: string, password: string) {
-    return axios.post(API_URL + "signup", {
+    return axios.post(HOST_URL + "signup", {
       username,
       email,
       password,

@@ -9,7 +9,7 @@ export const getBoardDetails = async (boardId?: string) => {
   try {
     let url;
     if (boardId) {
-      url = `http://${process.env.API_URL}/user/boards/${boardId}`;
+      url = `http://${process.env.HOST_URL}/user/boards/${boardId}`;
       const board = await axios.get<BoardData>(url, {
         headers: authHeader(),
       });
@@ -38,7 +38,7 @@ export const getBoards = async () => {
   if (AuthService.getCurrentUser()) {
     try {
       const boards = await axios.get<BoardData[]>(
-        `http://${process.env.API_URL}/user/boards`,
+        `http://${process.env.HOST_URL}/user/boards`,
         {
           headers: authHeader(),
         }
@@ -55,7 +55,7 @@ export const getAllBoards = async () => {
   if (AuthService.getCurrentUser()) {
     try {
       const boards = await axios.get<BoardData[]>(
-        `http://${process.env.API_URL}/boards`,
+        `http://${process.env.HOST_URL}/boards`,
         {
           headers: authHeader(),
         }

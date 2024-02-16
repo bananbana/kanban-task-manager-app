@@ -1,19 +1,19 @@
 import axios from "axios";
 import { authHeader } from "./auth-header";
 
-const API_URL = `http://${process.env.API_URL}/api/test/`;
+const HOST_URL = `http://${process.env.HOST_URL}/api/test/`;
 
 class UserService {
   getPublicContent() {
-    return axios.get(API_URL + "all");
+    return axios.get(HOST_URL + "all");
   }
 
   getUserBoard() {
-    return axios.get(API_URL + "user", { headers: authHeader() });
+    return axios.get(HOST_URL + "user", { headers: authHeader() });
   }
 
   getAdminBoard() {
-    return axios.get(API_URL + "admin", { headers: authHeader() });
+    return axios.get(HOST_URL + "admin", { headers: authHeader() });
   }
 }
 
