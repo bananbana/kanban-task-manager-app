@@ -9,7 +9,9 @@ export const getBoardDetails = async (boardId?: string) => {
   try {
     let url;
     if (boardId) {
-      url = `https://${process.env.REACT_APP_HOST_URL}/user/boards/${boardId}`;
+      url = `https://${
+        import.meta.env.REACT_APP_HOST_URL
+      }/user/boards/${boardId}`;
       const board = await axios.get<BoardData>(url, {
         headers: authHeader(),
       });
@@ -38,7 +40,7 @@ export const getBoards = async () => {
   if (AuthService.getCurrentUser()) {
     try {
       const boards = await axios.get<BoardData[]>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards`,
         {
           headers: authHeader(),
         }
@@ -55,7 +57,7 @@ export const getAllBoards = async () => {
   if (AuthService.getCurrentUser()) {
     try {
       const boards = await axios.get<BoardData[]>(
-        `https://${process.env.REACT_APP_HOST_URL}/boards`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/boards`,
         {
           headers: authHeader(),
         }

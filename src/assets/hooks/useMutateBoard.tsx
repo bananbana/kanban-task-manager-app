@@ -12,7 +12,9 @@ const useBoardMutation = () => {
   const editBoardNameMutation = useMutation({
     mutationFn: async (data: { boardId: string; name: string }) => {
       const res = await axios.put<BoardData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }`,
         { name: data.name },
         { headers: authHeader() }
       );
@@ -31,7 +33,9 @@ const useBoardMutation = () => {
       name: string;
     }) => {
       const res = await axios.put<StatusCodes>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/status_codes/${data.statusId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/status_codes/${data.statusId}`,
         { name: data.name },
         { headers: authHeader() }
       );
@@ -53,7 +57,9 @@ const useBoardMutation = () => {
       newColor: string;
     }) => {
       const res = await axios.put<StatusCodes>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/status_codes/${data.statusId}/color`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/status_codes/${data.statusId}/color`,
         { newColor: data.newColor },
         { headers: authHeader() }
       );
@@ -78,7 +84,7 @@ const useBoardMutation = () => {
     }) => {
       return await axios
         .post<BoardData>(
-          `https://${process.env.REACT_APP_HOST_URL}/user/boards/create`,
+          `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/create`,
           {
             name: data.name,
             statusCodes: data.statusCodes,
@@ -113,7 +119,9 @@ const useBoardMutation = () => {
   const addStatusMutation = useMutation({
     mutationFn: async (data: { boardId: string; name: string }) => {
       const res = await axios.post<StatusCodes>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/status_codes`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/status_codes`,
         {
           boardId: data.boardId,
           name: data.name,
@@ -134,7 +142,9 @@ const useBoardMutation = () => {
   const deleteStatusMutation = useMutation({
     mutationFn: async (data: { boardId: string; statusId: number }) => {
       await axios.delete<StatusCodes>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/status_codes/${data.statusId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/status_codes/${data.statusId}`,
         { headers: authHeader() }
       );
     },
@@ -147,7 +157,7 @@ const useBoardMutation = () => {
   const deleteBoardMutation = useMutation({
     mutationFn: (boardId: string) => {
       return axios.delete<BoardData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${boardId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${boardId}`,
         { headers: authHeader() }
       );
     },
@@ -163,7 +173,9 @@ const useBoardMutation = () => {
   const shareBoardMutation = useMutation({
     mutationFn: (data: { userId: number; boardId: number }) => {
       return axios.put<UserType>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/assign/${data.userId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/assign/${
+          data.userId
+        }`,
         { boardId: data.boardId },
         { headers: authHeader() }
       );

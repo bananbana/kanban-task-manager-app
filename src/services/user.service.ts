@@ -1,7 +1,9 @@
 import axios from "axios";
 import { authHeader } from "./auth-header";
 
-const REACT_APP_HOST_URL = `https://${process.env.REACT_APP_HOST_URL}/api/test/`;
+const REACT_APP_HOST_URL = `https://${
+  import.meta.env.REACT_APP_HOST_URL
+}/api/test/`;
 
 class UserService {
   getPublicContent() {

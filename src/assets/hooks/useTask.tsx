@@ -9,7 +9,9 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["tasks", taskId, boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/boards/${boardId}/tasks/${taskId}`
+        `https://${
+          import.meta.env.REACT_APP_HOST_URL
+        }/boards/${boardId}/tasks/${taskId}`
       );
       return { taskData: data };
     },
@@ -19,7 +21,7 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["subtasks", taskId],
     queryFn: async () => {
       const { data } = await axios.get<SubtaskData[]>(
-        `https://${process.env.REACT_APP_HOST_URL}/tasks/${taskId}/subtasks`
+        `https://${import.meta.env.REACT_APP_HOST_URL}/tasks/${taskId}/subtasks`
       );
       return { subtasks: data };
     },

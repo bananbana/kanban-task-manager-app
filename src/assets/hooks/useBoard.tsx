@@ -11,7 +11,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["boards", boardId],
     queryFn: async () => {
       const { data } = await axios.get<BoardData>(
-        `https://${process.env.REACT_APP_HOST_URL}/boards/${boardId}`
+        `https://${import.meta.env.REACT_APP_HOST_URL}/boards/${boardId}`
       );
       return { boardDetail: data };
     },
@@ -20,7 +20,9 @@ const useBoard = (boardId?: number) => {
     queryKey: ["statusCodes", boardId],
     queryFn: async () => {
       const { data } = await axios.get<StatusCodes[]>(
-        `https://${process.env.REACT_APP_HOST_URL}/boards/${boardId}/status_codes`
+        `https://${
+          import.meta.env.REACT_APP_HOST_URL
+        }/boards/${boardId}/status_codes`
       );
       return { statusCodes: data };
     },
@@ -30,7 +32,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["tasks", boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData[]>(
-        `https://${process.env.REACT_APP_HOST_URL}/boards/${boardId}/tasks`
+        `https://${import.meta.env.REACT_APP_HOST_URL}/boards/${boardId}/tasks`
       );
       return { boardsTasks: data };
     },

@@ -10,7 +10,9 @@ const useTaskMutation = () => {
   const createTaskMutation = useMutation({
     mutationFn: async (data: CreateTaskData) => {
       const response = await axios.post<TaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/tasks`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/tasks`,
         {
           title: data.title,
           description: data.description,
@@ -36,7 +38,9 @@ const useTaskMutation = () => {
   const editTaskMutation = useMutation({
     mutationFn: async (data: EditTaskData) => {
       const response = await axios.put<TaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/tasks/${data.taskId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/tasks/${data.taskId}`,
         {
           title: data.title,
           description: data.description,
@@ -58,7 +62,9 @@ const useTaskMutation = () => {
   const addSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; title: string }) => {
       const response = await axios.post<SubtaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/tasks/${data.taskId}/subtasks`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/tasks/${
+          data.taskId
+        }/subtasks`,
         {
           taskId: data.taskId,
           title: data.title,
@@ -76,7 +82,9 @@ const useTaskMutation = () => {
   const editSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; id: number; title: string }) => {
       const response = await axios.put<SubtaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/tasks/${
+          data.taskId
+        }/subtasks/${data.id}`,
         {
           title: data.title,
           taskId: data.taskId,
@@ -98,7 +106,9 @@ const useTaskMutation = () => {
   const toggleSubtaskMutation = useMutation({
     mutationFn: async (data: SubtaskData) => {
       const response = await axios.put<SubtaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/tasks/${
+          data.taskId
+        }/subtasks/${data.id}`,
         {
           title: data.title,
           taskId: data.taskId,
@@ -121,7 +131,9 @@ const useTaskMutation = () => {
   const deleteSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; id: number }) => {
       await axios.delete<SubtaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/tasks/${data.taskId}/subtasks/${data.id}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/tasks/${
+          data.taskId
+        }/subtasks/${data.id}`,
         { headers: authHeader() }
       );
     },
@@ -134,7 +146,9 @@ const useTaskMutation = () => {
   const deleteTaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; boardId: number }) => {
       await axios.delete<TaskData>(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/tasks/${data.taskId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/tasks/${data.taskId}`,
         { headers: authHeader() }
       );
     },
@@ -151,7 +165,9 @@ const useTaskMutation = () => {
       statusId?: number;
     }) => {
       const response = await axios.put(
-        `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/tasks/${data.taskId}/new_status/${data.statusId}`,
+        `https://${import.meta.env.REACT_APP_HOST_URL}/user/boards/${
+          data.boardId
+        }/tasks/${data.taskId}/new_status/${data.statusId}`,
         {},
         { headers: authHeader() }
       );
