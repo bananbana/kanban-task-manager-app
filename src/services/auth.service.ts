@@ -6,6 +6,7 @@ const API_URL = `https://${process.env.REACT_APP_HOST_URL}/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
+    console.log(process.env.REACT_APP_HOST_URL);
     return axios
       .post(API_URL + "signin", {
         username,
@@ -16,7 +17,7 @@ class AuthService {
           localStorage.setItem("user", JSON.stringify(response.data));
           eventBus.dispatch("login");
         }
-        console.log(API_URL);
+
         return response.data;
       });
   }
