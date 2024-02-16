@@ -10,10 +10,10 @@ export const getTask = async (
   try {
     let url;
     if (boardId && taskId) {
-      url = `https://${process.env.HOST_URL}/user/boards/${boardId}/tasks/${taskId}`;
+      url = `https://${process.env.REACT_APP_HOST_URL}/user/boards/${boardId}/tasks/${taskId}`;
       const task = await axios.get<TaskData>(url, { headers: authHeader() });
       const subtasks = await axios.get<SubtaskData[]>(
-        `https://${process.env.HOST_URL}/user/tasks/${taskId}/subtasks`,
+        `https://${process.env.REACT_APP_HOST_URL}/user/tasks/${taskId}/subtasks`,
         { headers: authHeader() }
       );
       return {
@@ -31,7 +31,7 @@ export const getTask = async (
 export const getAllTasksForAdm = async () => {
   try {
     const tasks = await axios.get<TaskData[]>(
-      `https://${process.env.HOST_URL}/boards/tasks`,
+      `https://${process.env.REACT_APP_HOST_URL}/boards/tasks`,
       { headers: authHeader() }
     );
     return tasks.data;

@@ -14,7 +14,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${process.env.HOST_URL}/user/${data.id}/update`,
+          `https://${process.env.REACT_APP_HOST_URL}/user/${data.id}/update`,
           {
             password: data.password,
             username: data.username,
@@ -43,7 +43,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { userId: number; boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${process.env.HOST_URL}/user/boards/${data.boardId}/user_access`,
+          `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/user_access`,
           { userId: data.userId },
           { headers: authHeader() }
         );
@@ -72,7 +72,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${process.env.HOST_URL}/user/${data.id}/password_change`,
+          `https://${process.env.REACT_APP_HOST_URL}/user/${data.id}/password_change`,
           {
             newPassword: data.newPassword,
             userDto: {
@@ -105,7 +105,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${process.env.HOST_URL}/user/boards/${data.boardId}/abandon_access`,
+          `https://${process.env.REACT_APP_HOST_URL}/user/boards/${data.boardId}/abandon_access`,
           {},
           { headers: authHeader() }
         );
@@ -130,7 +130,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.delete<UserType>(
-          `https://${process.env.HOST_URL}/user/${data.userId}/delete`,
+          `https://${process.env.REACT_APP_HOST_URL}/user/${data.userId}/delete`,
           {
             data: {
               username: data.username,

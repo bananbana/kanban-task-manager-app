@@ -2,12 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import IUser from "../types/user.type";
 import eventBus from "../common/EventBus";
 
-const HOST_URL = `https://${process.env.HOST_URL}/api/auth/`;
+const API_URL = `https://${process.env.REACT_APP_HOST_URL}/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
     return axios
-      .post(HOST_URL + "signin", {
+      .post(API_URL + "signin", {
         username,
         password,
       })
@@ -26,7 +26,7 @@ class AuthService {
   }
 
   register(username: string, email: string, password: string) {
-    return axios.post(HOST_URL + "signup", {
+    return axios.post(API_URL + "signup", {
       username,
       email,
       password,

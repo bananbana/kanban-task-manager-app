@@ -14,7 +14,7 @@ const useUpdateSubtask = () => {
       console.log("Toggle subtask mutation called with: ", variables);
 
       const response = await axios.put<SubtaskData>(
-        `https://${process.env.HOST_URL}/tasks/${taskId}/subtasks/${id}`,
+        `https://${process.env.REACT_APP_HOST_URL}/tasks/${taskId}/subtasks/${id}`,
         {
           id,
           title,
