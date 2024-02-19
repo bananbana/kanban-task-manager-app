@@ -7,4 +7,5 @@ export default defineConfig({
   define: {
     __APP_ENV__: process.env.VITE_HOST_URL,
   },
+  mode: "no-cors",
 });
