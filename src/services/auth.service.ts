@@ -7,10 +7,19 @@ const API_URL = `https://${import.meta.env.VITE_HOST_URL}/api/auth/`;
 class AuthService {
   login(username: string, password: string) {
     return axios
-      .post(API_URL + "signin", {
-        username,
-        password,
-      })
+      .post(
+        API_URL + "signin",
+        {
+          username,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "https://kanban-task-manager-app.vercel.app/",
+          },
+        }
+      )
       .then((response: AxiosResponse<{ accessToken: string }>) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
