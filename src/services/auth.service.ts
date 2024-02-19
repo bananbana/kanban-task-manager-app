@@ -6,7 +6,6 @@ const API_URL = `https://${import.meta.env.VITE_HOST_URL}/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
-    console.log(import.meta.env.VITE_HOST_URL);
     return axios
       .post(API_URL + "signin", {
         username,
