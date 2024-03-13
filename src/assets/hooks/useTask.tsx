@@ -9,7 +9,7 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["tasks", taskId, boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData>(
-        `https://${
+        `http://${
           import.meta.env.VITE_HOST_URL
         }/boards/${boardId}/tasks/${taskId}`
       );
@@ -21,7 +21,7 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["subtasks", taskId],
     queryFn: async () => {
       const { data } = await axios.get<SubtaskData[]>(
-        `https://${import.meta.env.VITE_HOST_URL}/tasks/${taskId}/subtasks`
+        `http://${import.meta.env.VITE_HOST_URL}/tasks/${taskId}/subtasks`
       );
       return { subtasks: data };
     },
