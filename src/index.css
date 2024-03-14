@@ -90,3 +90,7 @@ body {
 .acc-modal {
   @apply w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-grey p-6 text-left align-middle shadow-xl transition-all h-[500px];
 }
+
+.error-page {
+  @apply flex w-full h-1/2 justify-center items-center flex-wrap;
+}

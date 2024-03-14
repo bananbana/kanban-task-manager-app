@@ -160,12 +160,13 @@ const useBoardMutation = () => {
       );
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries(["boards"]);
+      void queryClient.refetchQueries(["boards"]);
     },
   });
 
   const deleteBoardHandler = (boardId: string) => {
     deleteBoardMutation.mutate(boardId);
+    void queryClient.cancelQueries(["boards", boardId]);
   };
 
   const shareBoardMutation = useMutation({

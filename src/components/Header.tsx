@@ -18,6 +18,8 @@ import { IconListBullet } from "../assets/images/IconListBullet";
 import { IconShareBoard } from "../assets/images/IconShareBoard";
 import { IconTrashcan } from "../assets/images/IconTrashcan";
 import { IconEdit } from "../assets/images/IconEdit";
+import { IconCross } from "../assets/images/IconCross";
+import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
 
 interface HeaderProps {
   isDarkTheme: boolean;
@@ -81,29 +83,30 @@ const Header = ({
         <Link to="/" className="tablet:hidden mx-4">
           <LogoMobile />
         </Link>
-        {currentUser && openedBoard !== undefined && (
+        {currentUser && (
           <div className="text-heading-xl items-center tablet:ml-8">
             <h3
               className={`dark:text-white text-black phone:flex items-center w-full`}
             >
               {openedBoard ? openedBoard.name : ""}
               <button
-                className="tablet:hidden ml-2 py-1"
+                className="tablet:hidden ml-2 pt-2"
                 onClick={toggleSidebar}
               >
                 <IconChevronDown />
               </button>
             </h3>
 
-            {openedBoard.ownerId !== currentUser.id && (
-              <h3 className="text-heading-s mt-1 text-medium-grey">
-                {
-                  users?.find((user) => user.id === openedBoard?.ownerId)
-                    ?.username
-                }
-                s' board
-              </h3>
-            )}
+            {openedBoard !== undefined &&
+              openedBoard.ownerId !== currentUser.id && (
+                <h3 className="text-heading-s mt-1 text-medium-grey">
+                  {
+                    users?.find((user) => user.id === openedBoard?.ownerId)
+                      ?.username
+                  }
+                  s' board
+                </h3>
+              )}
           </div>
         )}{" "}
         {location.pathname.includes("account") &&
@@ -143,7 +146,7 @@ const Header = ({
               + Add New Task
             </span>
             <span className="tablet:hidden px-2 py-[10px]">
-              <IconListBullet />
+              <IconAddTaskMobile />
             </span>
           </button>
         </Link>

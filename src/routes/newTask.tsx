@@ -10,6 +10,7 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import { StatusCodes } from "../types/StatusTypes";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
 import { IconChevronDown } from "../assets/images/IconChevronDown";
+import { IconBackMobile } from "../assets/images/IconBackMobile";
 
 const NewTask = () => {
   const { boardId } = useParams();
@@ -93,18 +94,28 @@ const NewTask = () => {
       );
     }
   };
+
+  const goBack = () => {
+    navigate(-1);
+  };
   return (
-    <div className="backdrop-overlay">
+    <div className="backdrop-overlay" id="backdrop">
       <div ref={modalRef} id="new-task-modal" className={`edit-modal`}>
-        <p className="text-heading-l my-8 px-6">Add New Task</p>
+        <div className="my-6 px-6 flex tablet:flex-row phone:flex-row-reverse justify-between">
+          <button onClick={goBack} className="tablet:hidden phone:block">
+            <IconBackMobile />
+          </button>
+
+          <h1 className="text-heading-l">Add New Task</h1>
+        </div>
         <Form
           method="put"
           id="new-task-form"
-          className="form"
+          className="form px-6"
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col w-full gap-3">
-            <div>
+            <div className="">
               <label className="text-body-m text-medium-grey mb-2 dark:text-white">
                 Title
               </label>
