@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import authService from "../services/auth.service";
 import { IconChevronDown } from "../assets/images/IconChevronDown";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
+import { useToast } from "../../@/components/ui/useToast";
 
 interface ShareBoardModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ const ShareBoardModal = ({
   const [selectedUsername, setSelectedUsername] = useState<string>("");
   const { shareBoard } = useBoardMutation();
   const { data: users } = useQuery(userQuery());
+  const { toast } = useToast();
 
   useEffect(() => {
     if (users) {
@@ -42,7 +44,6 @@ const ShareBoardModal = ({
 
   const handleShareBoard = (userId: number, boardId: number) => {
     shareBoard({ userId, boardId });
-    console.log(selectedUsername);
   };
   const onBoardShare = () => {
     const selectedUserId = users?.find(
@@ -51,6 +52,11 @@ const ShareBoardModal = ({
     if (selectedUserId !== undefined && openedBoard) {
       handleShareBoard(selectedUserId, openedBoard.id);
       closeModal();
+
+      toast({
+        title: `You shared '${boardName}' board.`,
+        description: `User ${selectedUsername} now has full access to this board.`,
+      });
     }
   };
   return (
@@ -158,16 +164,16 @@ const ShareBoardModal = ({
                     </Transition>
                   </div>
                 </Listbox>
-                <div className="mt-4 flex w-full justify-between">
+                <div className="mt-4 flex w-full justify-between gap-4">
                   <button
-                    className="h-10 bg-main-purple tablet:w-[200px] phone:w-[150px] rounded-full text-white hover:bg-main-purple-hover"
+                    className="h-10 bg-main-purple w-1/2 rounded-full text-white hover:bg-main-purple-hover"
                     disabled={openedBoard === undefined}
                     onClick={onBoardShare}
                   >
                     Share
                   </button>
                   <button
-                    className="h-10 bg-light-grey tablet:w-[200px] phone:w-[150px] rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
+                    className="h-10 bg-light-grey w-1/2 rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
                     onClick={closeModal}
                   >
                     Cancel

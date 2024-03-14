@@ -29,7 +29,7 @@ body {
 }
 
 .edit-modal {
-  @apply z-30 h-2/3 overflow-auto rounded-lg tablet:w-[480px] phone:w-full phone:m-4  dark:bg-dark-grey dark:text-white bg-white text-body-l;
+  @apply z-30 h-2/3 overflow-auto rounded-lg tablet:w-[480px] phone:w-full phone:m-4 dark:bg-dark-grey dark:text-white bg-white text-body-l;
 }
 
 .task-modal {

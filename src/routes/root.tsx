@@ -12,6 +12,7 @@ import { UserType } from "../types/UserType";
 import { currentUserSignal } from "../userSignal";
 import authService from "../services/auth.service";
 import { IconShowSidebar } from "../assets/images/IconShowSidebar";
+import { Toaster } from "../../@/components/ui/Toaster";
 
 const boardsListQuery = () => ({
   queryKey: ["boards"],
@@ -182,6 +183,7 @@ const Root = () => {
             </div>
           </div>
         </div>
+        <Toaster />
       </div>
     </>
   );
