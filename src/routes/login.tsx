@@ -54,10 +54,13 @@ const Login = () => {
   const initialValues = { username: "", password: "" };
 
   return (
-    <div id="login-container" className="w-full flex justify-center py-4">
+    <div
+      id="login-container"
+      className="w-full flex justify-center py-4 phone:mx-4"
+    >
       <div
         id="card-container"
-        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col justify-center py-6 px-4 items-center h-modal overflow-auto w-[480px] shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
+        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col justify-center py-6 px-4 items-center h-modal overflow-auto tablet:w-[480px] phone:w-full shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
       >
         <div
           id="login-info"

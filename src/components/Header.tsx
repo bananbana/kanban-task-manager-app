@@ -81,6 +81,30 @@ const Header = ({
         <Link to="/" className="tablet:hidden mx-4">
           <LogoMobile />
         </Link>
+        {location.pathname.includes("account") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black phone:w-28`}>
+                Account Settings
+              </h3>
+            </div>
+          )}
+        {location.pathname.includes("privacy") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black phone:w-28`}>
+                Privacy Settings
+              </h3>
+            </div>
+          )}
+        {location.pathname.includes("admin") &&
+          authHeader().username !== "Guest" && (
+            <div className="text-heading-xl items-center ml-8">
+              <h3 className={`dark:text-white text-black phone:w-28`}>
+                Admin Dashboard
+              </h3>
+            </div>
+          )}
         {currentUser && (
           <div className="text-heading-xl items-center tablet:ml-8">
             <h3
@@ -107,24 +131,6 @@ const Header = ({
               )}
           </div>
         )}{" "}
-        {location.pathname.includes("account") &&
-          authHeader().username !== "Guest" && (
-            <div className="text-heading-xl items-center ml-8">
-              <h3 className={`dark:text-white text-black`}>Account Settings</h3>
-            </div>
-          )}
-        {location.pathname.includes("privacy") &&
-          authHeader().username !== "Guest" && (
-            <div className="text-heading-xl items-center ml-8">
-              <h3 className={`dark:text-white text-black`}>Privacy Settings</h3>
-            </div>
-          )}
-        {location.pathname.includes("admin") &&
-          authHeader().username !== "Guest" && (
-            <div className="text-heading-xl items-center ml-8">
-              <h3 className={`dark:text-white text-black`}>Admin Dashboard</h3>
-            </div>
-          )}
       </div>
       <div
         id="header-btns"

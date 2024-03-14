@@ -70,10 +70,13 @@ const Register = () => {
   };
 
   return (
-    <div id="register-container" className="w-full flex justify-center py-4">
+    <div
+      id="register-container"
+      className="w-full flex justify-center py-4 phone:mx-4"
+    >
       <div
         id="card-container"
-        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col py-6 px-4 h-modal overflow-auto w-[480px] shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
+        className="dark:bg-dark-grey bg-white rounded-3xl flex flex-col py-6 px-4 h-modal overflow-auto tablet:w-[480px] phone:w-full shadow-[0px_10px_15px_5px_rgba(54,78,126,0.1)]"
       >
         <div id="register-info" className="flex flex-col w-full pb-3 pt-4">
           <p className="text-heading-l dark:text-white break-words mx-4">

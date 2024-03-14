@@ -22,12 +22,12 @@ const Index = () => {
       {currentUser ? (
         <div
           id="user-modal"
-          className="flex flex-col justify-center items-center mt-28"
+          className="flex flex-col justify-center items-center mt-28 phone:w-11/12"
         >
           <p className="text-medium-grey text-heading-l pb-2">
             Nothing here 🤷
           </p>
-          <p className="text-medium-grey text-heading-l pb-8">
+          <p className="text-medium-grey text-heading-l pb-8 text-center">
             Create a new board or select one from the list to get started
           </p>
           <NavLink to={"/user/boards/new"}>

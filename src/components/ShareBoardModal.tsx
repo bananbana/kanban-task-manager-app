@@ -158,16 +158,16 @@ const ShareBoardModal = ({
                     </Transition>
                   </div>
                 </Listbox>
-                <div className="mt-4">
+                <div className="mt-4 flex w-full justify-between">
                   <button
-                    className="h-10 bg-main-purple w-[200px] rounded-full text-white hover:bg-main-purple-hover"
+                    className="h-10 bg-main-purple tablet:w-[200px] phone:w-[150px] rounded-full text-white hover:bg-main-purple-hover"
                     disabled={openedBoard === undefined}
                     onClick={onBoardShare}
                   >
                     Share
                   </button>
                   <button
-                    className="h-10 bg-light-grey w-[200px] rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
+                    className="h-10 bg-light-grey tablet:w-[200px] phone:w-[150px] rounded-full text-main-purple hover:bg-main-purple/25 dark:hover:bg-white"
                     onClick={closeModal}
                   >
                     Cancel
