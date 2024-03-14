@@ -14,11 +14,9 @@ import { LogoLight } from "../assets/images/LogoLight";
 import { LogoDark } from "../assets/images/LogoDark";
 import { LogoMobile } from "../assets/images/LogoMobile";
 import { IconChevronDown } from "../assets/images/IconChevronDown";
-import { IconListBullet } from "../assets/images/IconListBullet";
 import { IconShareBoard } from "../assets/images/IconShareBoard";
 import { IconTrashcan } from "../assets/images/IconTrashcan";
 import { IconEdit } from "../assets/images/IconEdit";
-import { IconCross } from "../assets/images/IconCross";
 import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
 
 interface HeaderProps {
