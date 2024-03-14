@@ -18,6 +18,7 @@ import { IconShareBoard } from "../assets/images/IconShareBoard";
 import { IconTrashcan } from "../assets/images/IconTrashcan";
 import { IconEdit } from "../assets/images/IconEdit";
 import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
+import { IconChevronUp } from "../assets/images/IconChevronUp";
 
 interface HeaderProps {
   isDarkTheme: boolean;
@@ -115,7 +116,7 @@ const Header = ({
                 className="tablet:hidden ml-2 pt-2"
                 onClick={toggleSidebar}
               >
-                <IconChevronDown />
+                {sidebarHidden ? <IconChevronDown /> : <IconChevronUp />}
               </button>
             </h3>
 
