@@ -63,7 +63,7 @@ const NewBoard = () => {
     <div className="h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 flex justify-center items-center">
       <div
         ref={modalRef}
-        className={`absolute h-fit overflow-auto z-10 w-[480px] px-8 py-5 flex flex-col justify-center items-center rounded-lg dark:bg-dark-grey dark:text-white bg-white text-black`}
+        className={`absolute h-fit overflow-auto z-10 tablet:w-[480px] phone:w-11/12 px-8 py-5 flex flex-col justify-center items-center rounded-lg dark:bg-dark-grey dark:text-white bg-white text-black`}
       >
         <h1 className="text-heading-l mt-3 mb-6 w-full">Add New Board</h1>
         <form
