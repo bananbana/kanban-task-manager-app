@@ -7,7 +7,6 @@
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
 }
-
 .app-input {
   @apply border rounded-md w-full h-10 px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple;
 }
@@ -29,7 +28,7 @@ body {
 }
 
 .edit-modal {
-  @apply z-30 h-2/3 overflow-auto rounded-lg tablet:w-[480px] phone:w-full phone:m-4 dark:bg-dark-grey dark:text-white bg-white text-body-l;
+  @apply z-30 h-2/3 overflow-auto rounded-lg tablet:w-[480px] phone:w-full phone:m-4  dark:bg-dark-grey dark:text-white bg-white text-body-l;
 }
 
 .task-modal {
@@ -61,7 +60,7 @@ body {
 }
 
 .form-input {
-  @apply border rounded-md w-full px-2 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple;
+  @apply border rounded-md w-full px-2 py-1 focus:border-main-purple dark:bg-dark-grey dark:border-lines-dark border-lines-light hover:border-main-purple dark:hover:border-main-purple;
 }
 
 .listbox-button {
@@ -93,4 +92,19 @@ body {
 
 .error-page {
   @apply flex w-full h-1/2 justify-center items-center flex-wrap;
+}
+
+.toast {
+  @apply pointer-events-auto fixed flex w-fit items-center justify-between space-x-4 overflow-hidden rounded-md border border-lines-light p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full dark:border-lines-dark right-10 mt-4 z-10;
+}
+
+.variant-default {
+  @apply border bg-white text-black dark:bg-very-dark-grey dark:text-white;
+}
+
+.variant-destructive {
+  @apply border-destructive-red bg-destructive-red text-white;
+}
+.variant-success {
+  @apply border-green-600 bg-green-600 text-white;
 }

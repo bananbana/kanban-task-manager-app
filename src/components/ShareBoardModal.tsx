@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import authService from "../services/auth.service";
 import { IconChevronDown } from "../assets/images/IconChevronDown";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
-import { useToast } from "../../@/components/ui/useToast";
+import { useToast } from "./ui/useToast";
 
 interface ShareBoardModalProps {
   isOpen: boolean;
@@ -56,6 +56,7 @@ const ShareBoardModal = ({
       toast({
         title: `You shared '${boardName}' board.`,
         description: `User ${selectedUsername} now has full access to this board.`,
+        className: "toast variant-default",
       });
     }
   };
@@ -84,12 +85,15 @@ const ShareBoardModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full h-fit max-w-md transform overflow-visible rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-heading-l">
+              <Dialog.Panel className="w-full h-fit max-w-md transform overflow-visible rounded-2xl bg-white dark:bg-dark-grey p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Title
+                  as="h3"
+                  className="text-heading-l text-black dark:text-white"
+                >
                   Do you want to share '{boardName}' board?{" "}
                 </Dialog.Title>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-medium-grey">
                     This action will grant the chosen user access to all
                     columns, tasks and subtasks in this board and will allow
                     them to change this data.
@@ -100,7 +104,7 @@ const ShareBoardModal = ({
                   onChange={setSelectedUsername}
                 >
                   <div className="relative mt-6">
-                    <Listbox.Label className="text-body-m text-medium-grey pb-2 dark:text-white">
+                    <Listbox.Label className="text-body-m text-medium-grey pb-2">
                       Users
                     </Listbox.Label>
                     <Listbox.Button
@@ -124,7 +128,7 @@ const ShareBoardModal = ({
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-dark-grey dark:ring-white/5 shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                         {users
                           ?.filter((user) => user.username !== currentUserName)
                           .map((user) => (

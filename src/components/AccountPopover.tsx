@@ -41,7 +41,7 @@ const AccountPopover = ({ logOut, currentUser }: PopoverProps) => {
     }
   }, [currentUser]);
   return (
-    <div className="w-full tablet:pr-6">
+    <div className="w-full">
       <Popover className="relative">
         {({ open }) => (
           <>
@@ -61,7 +61,7 @@ const AccountPopover = ({ logOut, currentUser }: PopoverProps) => {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute z-10 mt-3 w-full h-fit">
+              <Popover.Panel className="absolute z-20 mt-3 w-full h-fit">
                 <div className="shadow-lg ring-1 ring-black/5">
                   <div className="relative flex flex-col bg-white dark:bg-very-dark-grey rounded-t-lg">
                     {showAdminContent

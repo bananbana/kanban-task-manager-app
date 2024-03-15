@@ -12,7 +12,7 @@ import { UserType } from "../types/UserType";
 import { currentUserSignal } from "../userSignal";
 import authService from "../services/auth.service";
 import { IconShowSidebar } from "../assets/images/IconShowSidebar";
-import { Toaster } from "../../@/components/ui/Toaster";
+import { Toaster } from "../components/ui/Toaster";
 
 const boardsListQuery = () => ({
   queryKey: ["boards"],
@@ -100,7 +100,6 @@ const Root = () => {
       document.documentElement.classList.add("dark");
       setIsDarkTheme(true);
     }
-    console.log(isDarkTheme);
   };
 
   const toggleSidebar = () => {
@@ -181,9 +180,9 @@ const Root = () => {
               )}
               <Outlet />
             </div>
+            <Toaster />
           </div>
         </div>
-        <Toaster />
       </div>
     </>
   );

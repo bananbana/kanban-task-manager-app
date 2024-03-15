@@ -7,8 +7,10 @@ import useUserMutation from "../assets/hooks/useUserMutation";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { currentUserSignal } from "../userSignal";
 import { IconChevronRight } from "../assets/images/IconChevronRight";
+import { useToast } from "../components/ui/useToast";
 
 const Privacy = () => {
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const { denyUserAccess, changePassword, removeBoardAccess } =
     useUserMutation();
@@ -80,6 +82,13 @@ const Privacy = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     void handleChangePassword();
+    toast({
+      title: "Password changed successfully!",
+      className: "toast variant-success",
+    });
+    closeModal();
+    setNewPassword("");
+    setOldPassword("");
   };
 
   const handleRemoveBoardAccess = (boardId: number) => {

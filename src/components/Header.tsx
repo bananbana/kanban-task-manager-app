@@ -19,6 +19,7 @@ import { IconTrashcan } from "../assets/images/IconTrashcan";
 import { IconEdit } from "../assets/images/IconEdit";
 import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
+import { useToast } from "./ui/useToast";
 
 interface HeaderProps {
   isDarkTheme: boolean;
@@ -39,6 +40,7 @@ const Header = ({
   users,
   toggleSidebar,
 }: HeaderProps) => {
+  const { toast } = useToast();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { deleteBoard } = useBoardMutation();
@@ -64,6 +66,10 @@ const Header = ({
     deleteBoard(boardId);
     navigate("/");
     closeDeleteModal();
+    toast({
+      title: "Board deleted",
+      className: "toast variant-destructive",
+    });
   };
 
   return (
