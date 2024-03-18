@@ -12,12 +12,10 @@ export const getTask = async (
     if (boardId && taskId) {
       url = `http://${
         import.meta.env.VITE_HOST_URL
-      }/user/boards/${boardId}/tasks/${taskId}`;
+      }/boards/${boardId}/tasks/${taskId}`;
       const task = await axios.get<TaskData>(url, { headers: authHeader() });
       const subtasks = await axios.get<SubtaskData[]>(
-        `https://${
-          import.meta.env.VITE_HOST_URL
-        }/user/tasks/${taskId}/subtasks`,
+        `https://${import.meta.env.VITE_HOST_URL}/tasks/${taskId}/subtasks`,
         { headers: authHeader() }
       );
       return {
