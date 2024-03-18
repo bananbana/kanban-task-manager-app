@@ -43,7 +43,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { userId: number; boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${import.meta.env.VITE_HOST_URL}/boards/${
+          `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
             data.boardId
           }/user_access`,
           { userId: data.userId },
@@ -109,7 +109,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `https://${import.meta.env.VITE_HOST_URL}/boards/${
+          `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
             data.boardId
           }/abandon_access`,
           {},
