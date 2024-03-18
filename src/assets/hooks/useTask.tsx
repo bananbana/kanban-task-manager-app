@@ -21,7 +21,7 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["subtasks", taskId],
     queryFn: async () => {
       const { data } = await axios.get<SubtaskData[]>(
-        `http://${import.meta.env.VITE_HOST_URL}/tasks/${taskId}/subtasks`
+        `https://${import.meta.env.VITE_HOST_URL}/tasks/${taskId}/subtasks`
       );
       return { subtasks: data };
     },

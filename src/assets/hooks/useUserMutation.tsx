@@ -14,7 +14,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.put<UserType>(
-          `http://${import.meta.env.VITE_HOST_URL}/user/${data.id}/update`,
+          `https://${import.meta.env.VITE_HOST_URL}/user/${data.id}/update`,
           {
             password: data.password,
             username: data.username,
@@ -43,7 +43,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { userId: number; boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+          `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
             data.boardId
           }/user_access`,
           { userId: data.userId },
@@ -74,7 +74,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.put<UserType>(
-          `http://${import.meta.env.VITE_HOST_URL}/user/${
+          `https://${import.meta.env.VITE_HOST_URL}/user/${
             data.id
           }/password_change`,
           {
@@ -109,7 +109,7 @@ const useUserMutation = () => {
     mutationFn: async (data: { boardId: number }) => {
       try {
         const res = await axios.put<UserType>(
-          `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+          `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
             data.boardId
           }/abandon_access`,
           {},
@@ -136,7 +136,7 @@ const useUserMutation = () => {
     }) => {
       try {
         const res = await axios.delete<UserType>(
-          `http://${import.meta.env.VITE_HOST_URL}/user/${data.userId}/delete`,
+          `https://${import.meta.env.VITE_HOST_URL}/user/${data.userId}/delete`,
           {
             data: {
               username: data.username,

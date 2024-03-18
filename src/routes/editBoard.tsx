@@ -1,5 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Form, useNavigate, useParams } from "react-router-dom";
 import InputAndDelete from "../components/InputAndDelete";
 import useBoardMutation from "../assets/hooks/useMutateBoard";

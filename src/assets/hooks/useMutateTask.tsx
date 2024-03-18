@@ -10,7 +10,7 @@ const useTaskMutation = () => {
   const createTaskMutation = useMutation({
     mutationFn: async (data: CreateTaskData) => {
       const response = await axios.post<TaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
           data.boardId
         }/tasks`,
         {
@@ -38,7 +38,7 @@ const useTaskMutation = () => {
   const editTaskMutation = useMutation({
     mutationFn: async (data: EditTaskData) => {
       const response = await axios.put<TaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
           data.boardId
         }/tasks/${data.taskId}`,
         {
@@ -62,7 +62,7 @@ const useTaskMutation = () => {
   const addSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; title: string }) => {
       const response = await axios.post<SubtaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/tasks/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/tasks/${
           data.taskId
         }/subtasks`,
         {
@@ -82,7 +82,7 @@ const useTaskMutation = () => {
   const editSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; id: number; title: string }) => {
       const response = await axios.put<SubtaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/tasks/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/tasks/${
           data.taskId
         }/subtasks/${data.id}`,
         {
@@ -106,7 +106,7 @@ const useTaskMutation = () => {
   const toggleSubtaskMutation = useMutation({
     mutationFn: async (data: SubtaskData) => {
       const response = await axios.put<SubtaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/tasks/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/tasks/${
           data.taskId
         }/subtasks/${data.id}`,
         {
@@ -131,7 +131,7 @@ const useTaskMutation = () => {
   const deleteSubtaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; id: number }) => {
       await axios.delete<SubtaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/tasks/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/tasks/${
           data.taskId
         }/subtasks/${data.id}`,
         { headers: authHeader() }
@@ -146,7 +146,7 @@ const useTaskMutation = () => {
   const deleteTaskMutation = useMutation({
     mutationFn: async (data: { taskId: number; boardId: number }) => {
       await axios.delete<TaskData>(
-        `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
           data.boardId
         }/tasks/${data.taskId}`,
         { headers: authHeader() }
@@ -165,7 +165,7 @@ const useTaskMutation = () => {
       statusId?: number;
     }) => {
       const response = await axios.put(
-        `http://${import.meta.env.VITE_HOST_URL}/user/boards/${
+        `https://${import.meta.env.VITE_HOST_URL}/user/boards/${
           data.boardId
         }/tasks/${data.taskId}/new_status/${data.statusId}`,
         {},

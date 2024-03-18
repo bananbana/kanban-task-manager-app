@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import IUser from "../types/user.type";
 import eventBus from "../common/EventBus";
 
-const API_URL = `http://${import.meta.env.VITE_HOST_URL}/api/auth/`;
+const API_URL = `https://${import.meta.env.VITE_HOST_URL}/api/auth/`;
 
 class AuthService {
   login(username: string, password: string) {
