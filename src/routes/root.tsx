@@ -65,6 +65,7 @@ const Root = () => {
 
     const handleLogout = () => {
       logOut();
+      isMobile && setSidebarHidden(true);
     };
 
     EventBus.on("logout", handleLogout);
@@ -72,7 +73,7 @@ const Root = () => {
     return () => {
       EventBus.remove("logout", handleLogout);
     };
-  }, [currentUser]);
+  }, [currentUser, isMobile]);
 
   useEffect(() => {
     parent.current && autoAnimate(parent.current);
