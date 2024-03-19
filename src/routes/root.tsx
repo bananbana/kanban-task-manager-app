@@ -41,9 +41,7 @@ const Root = () => {
     AuthService.logout();
     setCurrentUser(null);
     setCurrentUserName(undefined);
-    if (isMobile) {
-      setSidebarHidden(true);
-    }
+    if (isMobile) setSidebarHidden(true);
   };
 
   const onSetUser = (): void => {
@@ -74,7 +72,7 @@ const Root = () => {
     return () => {
       EventBus.remove("logout", handleLogout);
     };
-  }, [currentUser, isMobile]);
+  }, [currentUser]);
 
   useEffect(() => {
     parent.current && autoAnimate(parent.current);
