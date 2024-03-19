@@ -41,7 +41,9 @@ const Root = () => {
     AuthService.logout();
     setCurrentUser(null);
     setCurrentUserName(undefined);
-    console.log("logout");
+    if (isMobile) {
+      setSidebarHidden(true);
+    }
   };
 
   const onSetUser = (): void => {
@@ -65,7 +67,6 @@ const Root = () => {
 
     const handleLogout = () => {
       logOut();
-      isMobile && setSidebarHidden(true);
     };
 
     EventBus.on("logout", handleLogout);
