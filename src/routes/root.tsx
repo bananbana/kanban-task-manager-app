@@ -25,7 +25,6 @@ const Root = () => {
   const { data: boards } = useQuery(boardsListQuery());
   const { boardId } = useParams();
   const users = queryClient.getQueryData<UserType[]>(["users"]);
-  const [sidebarHidden, setSidebarHidden] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [currentUser, setCurrentUser] = useState<IUser | null>(
     currentUserSignal.value
@@ -34,6 +33,8 @@ const Root = () => {
     currentUserSignal.value?.username
   );
   const [isMobile, setIsMobile] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(isMobile ? true : false);
+
   const navigate = useNavigate();
   const parent = useRef(null);
 
@@ -92,7 +93,6 @@ const Root = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 640);
-      setSidebarHidden(true);
     };
     window.addEventListener("resize", handleResize);
     handleResize();

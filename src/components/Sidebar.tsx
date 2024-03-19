@@ -70,16 +70,16 @@ const Sidebar = ({
                         <NavLink
                           to={`user/boards/${board.id}`}
                           className={({ isActive }) =>
-                            `h-12 group hover:cursor-pointer rounded-r-full pl-8 mb-1 flex flex-row items-center dark:hover:bg-white tablet:hover:bg-main-purple-hover text-medium-grey fill-grey ${
+                            `h-12 group hover:cursor-pointer rounded-r-full pl-8 mb-1 flex flex-row items-center dark:hover:bg-white tablet:hover:bg-main-purple-hover  text-medium-grey fill-grey ${
                               isActive &&
                               "bg-main-purple tablet:hover:dark:bg-white fill-white text-white"
                             }`
                           }
                         >
-                          <IconBoard className="w-4 h-4 tablet:dark:group-hover:fill-purple group-hover:fill-white" />
+                          <IconBoard className="w-4 h-4 tablet:dark:group-hover:fill-purple tablet:group-hover:fill-white" />
                           <h3
                             id="board-name"
-                            className={`dark:group-hover:text-main-purple group-hover:text-white text-heading-m pl-4`}
+                            className={`dark:group-hover:text-main-purple tablet:group-hover:text-white text-heading-m pl-4`}
                           >
                             {board.name}
                           </h3>{" "}
