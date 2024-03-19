@@ -15,6 +15,7 @@ interface SidebarProps {
   username: string | null | undefined;
   logOut: () => void;
   currentUser: IUser | null;
+  isMobile: boolean;
 }
 
 const Sidebar = ({
@@ -26,6 +27,7 @@ const Sidebar = ({
   username,
   logOut,
   currentUser,
+  isMobile,
 }: SidebarProps) => {
   return (
     <div
@@ -161,17 +163,19 @@ const Sidebar = ({
         <div className="py-2 w-full flex justify-end">
           <Toggle value={value} toggleValue={toggleValue}></Toggle>
         </div>
-        <div className="w-full pr-6">
-          <button
-            className={`dark:hover:bg-white hover:bg-lines-light h-12 flex items-center pl-8 mr-6 hover:cursor-pointer rounded-r-full group w-full`}
-            onClick={hideSidebar}
-          >
-            <IconHideSidebar className=" group-hover:fill-purple fill-grey" />
-            <p className="text-medium-grey text-heading-m group-hover:text-main-purple pl-4">
-              Hide Sidebar
-            </p>
-          </button>
-        </div>
+        {!isMobile && (
+          <div className="w-full pr-6">
+            <button
+              className={`dark:hover:bg-white hover:bg-lines-light h-12 flex items-center pl-8 mr-6 hover:cursor-pointer rounded-r-full group w-full`}
+              onClick={hideSidebar}
+            >
+              <IconHideSidebar className=" group-hover:fill-purple fill-grey" />
+              <p className="text-medium-grey text-heading-m group-hover:text-main-purple pl-4">
+                Hide Sidebar
+              </p>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

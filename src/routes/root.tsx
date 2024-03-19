@@ -33,6 +33,7 @@ const Root = () => {
   const [currentUserName, setCurrentUserName] = useState<string | undefined>(
     currentUserSignal.value?.username
   );
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const parent = useRef(null);
 
@@ -88,6 +89,17 @@ const Root = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+      setSidebarHidden(true);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const changeTheme = () => {
     if (isDarkTheme) {
       // Change to light theme and save preference in local storage
@@ -137,7 +149,7 @@ const Root = () => {
             />
           </div>
           <div className={`flex h-full overflow-auto`} ref={parent}>
-            {!sidebarHidden && (
+            {!sidebarHidden && !isMobile && (
               <div
                 id="sidebar"
                 className={`tablet:flex phone:hidden tablet:h-full`}
@@ -154,6 +166,7 @@ const Root = () => {
                     logOut();
                     navigate("/login");
                   }}
+                  isMobile={isMobile}
                 />
               </div>
             )}
@@ -161,7 +174,7 @@ const Root = () => {
               id="detail"
               className="flex justify-start flex-1 h-full w-screen overflow-auto items-center"
             >
-              {!sidebarHidden && (
+              {!sidebarHidden && isMobile && (
                 <div className="phone:flex tablet:hidden mt-16 h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 justify-center">
                   <Sidebar
                     currentUser={currentUser}
@@ -175,6 +188,7 @@ const Root = () => {
                       logOut();
                       navigate("/login");
                     }}
+                    isMobile={isMobile}
                   />
                 </div>
               )}
