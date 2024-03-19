@@ -10,7 +10,7 @@ export const getTask = async (
   try {
     let url;
     if (boardId && taskId) {
-      url = `http://${
+      url = `https://${
         import.meta.env.VITE_HOST_URL
       }/user/boards/${boardId}/tasks/${taskId}`;
       const task = await axios.get<TaskData>(url, { headers: authHeader() });

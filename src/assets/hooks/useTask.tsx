@@ -9,7 +9,7 @@ const useTask = (boardId: number, taskId: number) => {
     queryKey: ["tasks", taskId, boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData>(
-        `http://${
+        `https://${
           import.meta.env.VITE_HOST_URL
         }/boards/${boardId}/tasks/${taskId}`
       );
