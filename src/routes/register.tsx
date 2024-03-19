@@ -100,11 +100,7 @@ const Register = () => {
                   className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
                 >
                   <label htmlFor="username"> Username </label>
-                  <Field
-                    name="username"
-                    type="text"
-                    className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
-                  />
+                  <Field name="username" type="text" className="form-input" />
                   <ErrorMessage
                     name="username"
                     component="div"
@@ -117,11 +113,7 @@ const Register = () => {
                   className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
                 >
                   <label htmlFor="email">Email </label>
-                  <Field
-                    name="email"
-                    type="email"
-                    className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
-                  />
+                  <Field name="email" type="email" className="form-input" />
                   <ErrorMessage
                     name="email"
                     component="div"
@@ -137,7 +129,7 @@ const Register = () => {
                   <Field
                     name="password"
                     type="password"
-                    className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
+                    className="form-input"
                   />
                   <ErrorMessage
                     name="password"

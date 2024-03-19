@@ -200,7 +200,7 @@ const Board = () => {
 
           <div
             id="new-column"
-            className={`hover:scale-105 transition-transform duration-500 ease-in-out w-72 text-heading-xl text-medium-grey flex justify-center items-center group rounded-lg group hover:cursor-pointer h-full bg-gradient-to-b dark:from-dark-grey dark:to-very-dark-grey to-75% from-[rgba(233,239,250,1)] to-light-grey ml-6 my-[60px]`}
+            className={`hover:scale-105 transition-transform duration-500 ease-in-out w-72 text-heading-xl text-medium-grey flex justify-center items-center group rounded-lg group hover:cursor-pointer h-full bg-gradient-to-b dark:from-dark-grey dark:to-very-dark-grey to-75% from-[rgba(233,239,250,1)] to-light-grey ml-6 tablet:my-[60px] phone:my-[40px]`}
           >
             <Link to={`edit`}>
               <button className="group-hover:text-main-purple group-hover:cursor-pointer">

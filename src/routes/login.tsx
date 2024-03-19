@@ -84,11 +84,7 @@ const Login = () => {
               className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
             >
               <label htmlFor="username">Username</label>
-              <Field
-                name="username"
-                type="text"
-                className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
-              />
+              <Field name="username" type="text" className="form-input" />
               <ErrorMessage
                 name="username"
                 component="div"
@@ -101,11 +97,7 @@ const Login = () => {
               className="text-body-xl text-medium-grey pb-2 dark:text-white flex flex-col"
             >
               <label htmlFor="password">Password</label>
-              <Field
-                name="password"
-                type="password"
-                className={`focus:ring-main-purple border-lines-light dark:border-lines-dark rounded-md dark:bg-dark-grey`}
-              />
+              <Field name="password" type="password" className="form-input" />
               <ErrorMessage
                 name="password"
                 component="div"
