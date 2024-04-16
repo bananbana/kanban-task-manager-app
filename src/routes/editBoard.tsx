@@ -67,8 +67,6 @@ const EditBoard = () => {
 
   const confirmRemove = () => {
     if (removeId !== null) {
-      // Perform the actual removal here
-      console.log("Confirmed removal of column with id:", removeId);
       setColumns((prevColumns) =>
         prevColumns.filter((columns_) => columns_.id !== removeId)
       );

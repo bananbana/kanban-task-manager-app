@@ -61,8 +61,6 @@ const Board = () => {
 
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Task") {
-      console.log(event.active.data.current);
-
       setActiveTask(event.active.data.current.task as TaskData);
       return;
     }
@@ -124,7 +122,7 @@ const Board = () => {
       >
         <div
           id="board-empty"
-          className="bg-none h-fit flex flex-col items-center absolute"
+          className="bg-none h-fit flex flex-col items-center phone:text-center phone:px-4 absolute"
         >
           <p className="text-medium-grey text-heading-l pb-4">
             This board is empty. Create a new column to get started.

@@ -137,7 +137,6 @@ const EditTask = () => {
     }
     void queryClient.refetchQueries(["boards", boardId]);
     void queryClient.refetchQueries(["tasks", taskId]);
-    console.log(taskId);
   };
 
   const goBack = () => {

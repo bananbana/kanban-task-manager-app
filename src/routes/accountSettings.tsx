@@ -31,7 +31,6 @@ const AccountSettings = () => {
   const logOut = () => {
     AuthService.logout();
     currentUserSignal.value = null;
-    console.log("logout");
   };
 
   const openConfirmModal = () => {

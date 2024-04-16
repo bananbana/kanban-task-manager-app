@@ -42,7 +42,6 @@ const Column = ({
   const handleColorChange = (newColor: string) => {
     setStatusColor(newColor);
     setColorChanged(true);
-    console.log(statusColor);
   };
   const handleColorPicker = () => {
     colorPickerRef.current?.click();

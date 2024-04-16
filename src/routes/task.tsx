@@ -51,7 +51,6 @@ const Task = () => {
     const isCompleted = event.target.checked;
     toggleSubtask({ taskId, id, title, isCompleted });
     void queryClient.invalidateQueries(["boards", boardId]);
-    console.log(isCompleted);
   };
 
   const linkProps = {

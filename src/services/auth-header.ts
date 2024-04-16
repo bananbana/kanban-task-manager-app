@@ -11,7 +11,6 @@ export const authHeader = () => {
       username: user.username,
     };
   } else {
-    console.log("No authorization header.");
     return {
       Authorization: "No authorization.",
       username: "Guest",
