@@ -32,8 +32,7 @@ const Root = () => {
   const [currentUserName, setCurrentUserName] = useState<string | undefined>(
     currentUserSignal.value?.username
   );
-  const [isMobile, setIsMobile] = useState(false);
-  const [sidebarHidden, setSidebarHidden] = useState(isMobile ? true : false);
+  const [sidebarHidden, setSidebarHidden] = useState(true);
 
   const navigate = useNavigate();
   const parent = useRef(null);
@@ -42,7 +41,6 @@ const Root = () => {
     AuthService.logout();
     setCurrentUser(null);
     setCurrentUserName(undefined);
-    if (isMobile) setSidebarHidden(true);
   };
 
   const onSetUser = (): void => {
@@ -88,16 +86,6 @@ const Root = () => {
       setIsDarkTheme(false);
       document.documentElement.classList.remove("dark");
     }
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 640);
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const changeTheme = () => {
@@ -149,7 +137,7 @@ const Root = () => {
             />
           </div>
           <div className={`flex h-full overflow-auto`} ref={parent}>
-            {!sidebarHidden && !isMobile && (
+            {!sidebarHidden && (
               <div
                 id="sidebar"
                 className={`tablet:flex phone:hidden tablet:h-full`}
@@ -166,7 +154,6 @@ const Root = () => {
                     logOut();
                     navigate("/login");
                   }}
-                  isMobile={isMobile}
                 />
               </div>
             )}
@@ -174,8 +161,12 @@ const Root = () => {
               id="detail"
               className="flex justify-start flex-1 h-full w-screen overflow-auto items-center"
             >
-              {!sidebarHidden && isMobile && (
-                <div className="phone:flex tablet:hidden mt-16 h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 justify-center">
+              {!sidebarHidden && (
+                <div
+                  className={`phone:flex tablet:hidden mt-16 h-full w-screen backdrop-brightness-50 top-0 left-0 fixed z-40 justify-center ${
+                    !currentUser ? "phone:hidden" : ""
+                  }`}
+                >
                   <Sidebar
                     currentUser={currentUser}
                     value={isDarkTheme}
@@ -188,7 +179,6 @@ const Root = () => {
                       logOut();
                       navigate("/login");
                     }}
-                    isMobile={isMobile}
                   />
                 </div>
               )}

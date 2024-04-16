@@ -15,7 +15,6 @@ interface SidebarProps {
   username: string | null | undefined;
   logOut: () => void;
   currentUser: IUser | null;
-  isMobile: boolean;
 }
 
 const Sidebar = ({
@@ -27,11 +26,10 @@ const Sidebar = ({
   username,
   logOut,
   currentUser,
-  isMobile,
 }: SidebarProps) => {
   return (
     <div
-      className="z-10 bg-white dark:bg-dark-grey dark:border-lines-dark border-lines-light border-r w-[300px] tablet:w-[260px] flex flex-col tablet:min-h-max overflow-auto relative tablet:rounded-none phone:h-1/2 tablet:h-full phone:my-3 tablet:my-0 phone:border-none phone:rounded-xl"
+      className={`z-10 bg-white dark:bg-dark-grey dark:border-lines-dark border-lines-light border-r w-[300px] tablet:w-[260px] flex flex-col tablet:min-h-max overflow-auto relative tablet:rounded-none phone:h-1/2 tablet:h-full phone:my-3 tablet:my-0 phone:border-none phone:rounded-xl`}
       id="sidebar"
     >
       {currentUser && (
@@ -163,19 +161,17 @@ const Sidebar = ({
         <div className="py-2 w-full flex justify-end">
           <Toggle value={value} toggleValue={toggleValue}></Toggle>
         </div>
-        {!isMobile && (
-          <div className="w-full pr-6">
-            <button
-              className={`dark:hover:bg-white hover:bg-lines-light h-12 flex items-center pl-8 mr-6 hover:cursor-pointer rounded-r-full group w-full`}
-              onClick={hideSidebar}
-            >
-              <IconHideSidebar className=" group-hover:fill-purple fill-grey" />
-              <p className="text-medium-grey text-heading-m group-hover:text-main-purple pl-4">
-                Hide Sidebar
-              </p>
-            </button>
-          </div>
-        )}
+        <div className="w-full pr-6 tablet:block phone:hidden">
+          <button
+            className={`dark:hover:bg-white hover:bg-lines-light h-12 flex items-center pl-8 mr-6 hover:cursor-pointer rounded-r-full group w-full`}
+            onClick={hideSidebar}
+          >
+            <IconHideSidebar className=" group-hover:fill-purple fill-grey" />
+            <p className="text-medium-grey text-heading-m group-hover:text-main-purple pl-4">
+              Hide Sidebar
+            </p>
+          </button>
+        </div>
       </div>
     </div>
   );
