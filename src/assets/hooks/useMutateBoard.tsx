@@ -166,7 +166,7 @@ const useBoardMutation = () => {
 
   const deleteBoardHandler = (boardId: string) => {
     deleteBoardMutation.mutate(boardId);
-    void queryClient.cancelQueries(["boards", boardId]);
+    void queryClient.removeQueries(["boards", boardId]);
   };
 
   const shareBoardMutation = useMutation({
