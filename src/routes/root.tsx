@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { useEffect, useRef, useState } from "react";
 import { getBoards } from "../boards";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useIsFetching, useQuery, useQueryClient } from "@tanstack/react-query";
 import autoAnimate from "@formkit/auto-animate";
 import IUser from "../types/user.type";
 import EventBus from "../common/EventBus";
@@ -13,6 +13,7 @@ import { currentUserSignal } from "../userSignal";
 import authService from "../services/auth.service";
 import { IconShowSidebar } from "../assets/images/IconShowSidebar";
 import { Toaster } from "../components/ui/Toaster";
+import { BoardDetails } from "../types/BoardTypes";
 
 const boardsListQuery = () => ({
   queryKey: ["boards"],
@@ -32,7 +33,14 @@ const Root = () => {
   const [currentUserName, setCurrentUserName] = useState<string | undefined>(
     currentUserSignal.value?.username
   );
-  const [sidebarHidden, setSidebarHidden] = useState(true);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const boardDetails = queryClient.getQueryData<BoardDetails>([
+    "boards",
+    boardId,
+  ]);
+  const isFetchingBoardDetails = useIsFetching({
+    queryKey: ["boards", boardId],
+  });
 
   const navigate = useNavigate();
   const parent = useRef(null);
@@ -134,6 +142,8 @@ const Root = () => {
               currentUser={currentUser}
               users={users}
               toggleSidebar={toggleSidebar}
+              boardDetails={boardDetails}
+              isFetching={isFetchingBoardDetails}
             />
           </div>
           <div className={`flex h-full overflow-auto`} ref={parent}>

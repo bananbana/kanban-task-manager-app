@@ -1,6 +1,5 @@
 import { Fragment, useState } from "react";
 import { Form, Link, useNavigate } from "react-router-dom";
-import { BoardData } from "../types/BoardTypes";
 import { Menu, Transition } from "@headlessui/react";
 import { IconVerticalEllipsis } from "../assets/images/IconVerticalEllipsis";
 import useBoardMutation from "../assets/hooks/useMutateBoard";
@@ -20,24 +19,30 @@ import { IconEdit } from "../assets/images/IconEdit";
 import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
 import { useToast } from "./ui/useToast";
+import { BoardData, BoardDetails } from "../types/BoardTypes";
+import { Skeleton } from "./ui/skeleton";
 
 interface HeaderProps {
   isDarkTheme: boolean;
   sidebarHidden: boolean;
   openedBoard: BoardData | undefined;
+  boardDetails: BoardDetails | undefined;
   currentUserName: string | undefined;
   currentUser: IUser | null;
   users: UserType[] | undefined;
   toggleSidebar: () => void;
+  isFetching: number;
 }
 
 const Header = ({
   isDarkTheme,
   sidebarHidden,
   openedBoard,
+  boardDetails,
   currentUserName,
   currentUser,
   users,
+  isFetching,
   toggleSidebar,
 }: HeaderProps) => {
   const { toast } = useToast();
@@ -114,28 +119,36 @@ const Header = ({
           )}
         {currentUser && (
           <div className="text-heading-xl items-center tablet:ml-8">
-            <h3
-              className={`dark:text-white text-black phone:flex items-center w-full`}
-            >
-              {openedBoard ? openedBoard.name : ""}
-              <button
-                className="tablet:hidden ml-2 pt-2"
-                onClick={toggleSidebar}
-              >
-                {sidebarHidden ? <IconChevronDown /> : <IconChevronUp />}
-              </button>
-            </h3>
+            {isFetching ? (
+              <Skeleton className="w-56 h-8 rounded-full" />
+            ) : (
+              <>
+                <span className="phone:flex">
+                  <h3
+                    className={`dark:text-white text-black phone:flex items-center w-full`}
+                  >
+                    {openedBoard ? openedBoard.name : ""}
+                  </h3>
 
-            {openedBoard !== undefined &&
-              openedBoard.ownerId !== currentUser.id && (
-                <h3 className="text-heading-s mt-1 text-medium-grey">
-                  {
-                    users?.find((user) => user.id === openedBoard?.ownerId)
-                      ?.username
-                  }
-                  s' board
-                </h3>
-              )}
+                  <button
+                    className="tablet:hidden ml-2 pt-2"
+                    onClick={toggleSidebar}
+                  >
+                    {sidebarHidden ? <IconChevronDown /> : <IconChevronUp />}
+                  </button>
+                </span>
+                {openedBoard !== undefined &&
+                  openedBoard.ownerId !== currentUser.id && (
+                    <h3 className="text-heading-s mt-1 text-medium-grey">
+                      {
+                        users?.find((user) => user.id === openedBoard?.ownerId)
+                          ?.username
+                      }
+                      s' board
+                    </h3>
+                  )}
+              </>
+            )}
           </div>
         )}{" "}
       </div>
@@ -143,24 +156,29 @@ const Header = ({
         id="header-btns"
         className="flex flex-row items-center w-fit mr-[30px]"
       >
-        <Link
-          to={`user/boards/${openedBoard?.id}/tasks/new`}
-          className="h-full"
-        >
-          <button
-            id="add-task-btn"
-            className="btn-primary-l mr-4 phone:w-12 tablet:w-fit tablet:items-center"
-            disabled={!openedBoard}
-          >
-            <span className="tablet:inline hidden px-6 py-3">
-              {" "}
-              + Add New Task
-            </span>
-            <span className="tablet:hidden px-2 py-[10px]">
-              <IconAddTaskMobile />
-            </span>
-          </button>
-        </Link>
+        {isFetching ? (
+          <Skeleton className="tablet:w-[164px] h-12 phone:w-12 phone:h-8 rounded-full mr-4 bg-main-purple/20" />
+        ) : (
+          boardDetails && (
+            <Link
+              to={`user/boards/${openedBoard?.id}/tasks/new`}
+              className="h-full"
+            >
+              <button
+                id="add-task-btn"
+                className="btn-primary-l mr-4 phone:w-12 tablet:w-fit tablet:items-center"
+                disabled={!openedBoard || !boardDetails.statusCodes.length}
+              >
+                <span className="tablet:inline hidden px-6 py-3">
+                  + Add New Task
+                </span>
+                <span className="tablet:hidden px-2 py-[10px]">
+                  <IconAddTaskMobile />
+                </span>
+              </button>
+            </Link>
+          )
+        )}
         <div
           id="header-more-btn"
           className={`flex justify-center items-center rounded-full`}
