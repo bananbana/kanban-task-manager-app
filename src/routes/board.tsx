@@ -54,7 +54,7 @@ const Board = () => {
                 <Skeleton className="h-4 w-4 rounded-full bg-slate-200" />
                 <Skeleton className="ml-3 w-20 h-4 bg-slate-200" />
               </span>
-              {Array.from({ length: 3 - index }).map((i, subIndex) => (
+              {Array.from({ length: 3 - index }).map((_, subIndex) => (
                 <Skeleton
                   key={subIndex}
                   className="rounded-lg h-24 bg-slate-200 mb-5"
