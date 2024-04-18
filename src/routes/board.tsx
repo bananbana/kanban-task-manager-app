@@ -20,7 +20,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { TaskData } from "../types/TaskTypes";
 import useTaskMutation from "../assets/hooks/useMutateTask";
-import { Skeleton } from "../components/ui/Skeleton";
+import { Skeleton } from "@ui/Skeleton";
 
 const boardQuery = (q?: string) => ({
   queryKey: ["boards", q ?? q],
