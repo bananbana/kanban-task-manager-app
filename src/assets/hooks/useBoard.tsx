@@ -11,7 +11,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["boards", boardId],
     queryFn: async () => {
       const { data } = await axios.get<BoardData>(
-        `https://${import.meta.env.VITE_HOST_URL}/boards/${boardId}`
+        `http://${import.meta.env.VITE_HOST_URL}/boards/${boardId}`
       );
       return { boardDetail: data };
     },
@@ -20,9 +20,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["statusCodes", boardId],
     queryFn: async () => {
       const { data } = await axios.get<StatusCodes[]>(
-        `https://${
-          import.meta.env.VITE_HOST_URL
-        }/boards/${boardId}/status_codes`
+        `http://${import.meta.env.VITE_HOST_URL}/boards/${boardId}/status_codes`
       );
       return { statusCodes: data };
     },
@@ -32,7 +30,7 @@ const useBoard = (boardId?: number) => {
     queryKey: ["tasks", boardId],
     queryFn: async () => {
       const { data } = await axios.get<TaskData[]>(
-        `https://${import.meta.env.VITE_HOST_URL}/boards/${boardId}/tasks`
+        `http://${import.meta.env.VITE_HOST_URL}/boards/${boardId}/tasks`
       );
       return { boardsTasks: data };
     },

@@ -20,7 +20,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { TaskData } from "../types/TaskTypes";
 import useTaskMutation from "../assets/hooks/useMutateTask";
-import { BeatLoader } from "react-spinners";
+import { Skeleton } from "../components/ui/skeleton";
 
 const boardQuery = (q?: string) => ({
   queryKey: ["boards", q ?? q],
@@ -46,9 +46,25 @@ const Board = () => {
 
   if (isLoading) {
     return (
-      <div className="h-full w-full flex justify-center items-center">
-        {" "}
-        <BeatLoader color="#635FC7" />
+      <div className="h-full w-fit flex justify-center">
+        <div className="flex w-full h-full">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div className="w-72 ml-6" key={index}>
+              <span className="flex mt-4 py-3" key={index}>
+                <Skeleton className="h-4 w-4 rounded-full bg-slate-200" />
+                <Skeleton className="ml-3 w-20 h-4 bg-slate-200" />
+              </span>
+              {Array.from({ length: 3 - index }).map((i, subIndex) => (
+                <Skeleton
+                  key={subIndex}
+                  className="rounded-lg h-24 bg-slate-200 mb-5"
+                />
+              ))}
+            </div>
+          ))}
+
+          <Skeleton className="w-72 h-3/4 bg-slate-200 mb-6 mt-16 mx-6" />
+        </div>
       </div>
     );
   }
@@ -61,8 +77,6 @@ const Board = () => {
 
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Task") {
-      console.log(event.active.data.current);
-
       setActiveTask(event.active.data.current.task as TaskData);
       return;
     }
@@ -124,7 +138,7 @@ const Board = () => {
       >
         <div
           id="board-empty"
-          className="bg-none h-fit flex flex-col items-center absolute"
+          className="bg-none h-fit flex flex-col items-center phone:text-center phone:px-4 absolute"
         >
           <p className="text-medium-grey text-heading-l pb-4">
             This board is empty. Create a new column to get started.
@@ -156,7 +170,7 @@ const Board = () => {
         id="columns-container"
         className="h-full w-screen overflow-auto flex-1"
       >
-        <div id="column" className="flex-row flex h-full w-fit">
+        <div id="column" className="flex h-full w-fit">
           <DndContext
             sensors={sensors}
             onDragEnd={onDragEnd}

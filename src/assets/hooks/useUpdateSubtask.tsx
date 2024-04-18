@@ -6,12 +6,10 @@ import { useParams } from "react-router-dom";
 const useUpdateSubtask = () => {
   const queryClient = useQueryClient();
   const { taskId } = useParams();
-  console.log(taskId);
 
   const toggleSubtask = useMutation(
     async (variables: SubtaskData) => {
       const { id, title, isCompleted, taskId } = variables;
-      console.log("Toggle subtask mutation called with: ", variables);
 
       const response = await axios.put<SubtaskData>(
         `https://${
