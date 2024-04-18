@@ -20,7 +20,7 @@ import { IconAddTaskMobile } from "../assets/images/IconAddTaskMobile";
 import { IconChevronUp } from "../assets/images/IconChevronUp";
 import { useToast } from "./ui/useToast";
 import { BoardData, BoardDetails } from "../types/BoardTypes";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "./ui/Skeleton";
 
 interface HeaderProps {
   isDarkTheme: boolean;
