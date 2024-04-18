@@ -16,6 +16,7 @@ import BoardAdmin from "./routes/adminBoard";
 import Privacy from "./routes/privacy";
 import AccountSettings from "./routes/accountSettings";
 import { currentUserSignal } from "./userSignal";
+import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -93,6 +94,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Analytics />
     </QueryClientProvider>
   );
 }
